@@ -156,13 +156,23 @@ function updateCourtHolidaysDisplay() {
 
     if (lang === 'fr') {
         container.innerHTML = `
-            <li><strong>Pâques ${easterYear}:</strong> ${formatDate(easterStart)} – ${formatDate(easterEnd)}</li>
+            <li><strong>Pâques ${easterYear}:</strong> ${formatDate(easterStart)} – ${formatDate(easterEnd)}
+                <span class="info-tooltip">
+                    <span class="info-icon">?</span>
+                    <span class="tooltip-content">7 jours avant jusqu'à 7 jours après Pâques. Les dates sont calculées dynamiquement selon la formule de Gauss.</span>
+                </span>
+            </li>
             <li><strong>Été:</strong> 15 juillet – 15 août</li>
             <li><strong>Hiver:</strong> 18 décembre – 2 janvier</li>
         `;
     } else {
         container.innerHTML = `
-            <li><strong>Ostern ${easterYear}:</strong> ${formatDate(easterStart)} – ${formatDate(easterEnd)}</li>
+            <li><strong>Ostern ${easterYear}:</strong> ${formatDate(easterStart)} – ${formatDate(easterEnd)}
+                <span class="info-tooltip">
+                    <span class="info-icon">?</span>
+                    <span class="tooltip-content">7 Tage vor bis und mit 7 Tage nach Ostern. Die Daten werden dynamisch nach der Gaußschen Osterformel berechnet.</span>
+                </span>
+            </li>
             <li><strong>Sommer:</strong> 15. Juli – 15. August</li>
             <li><strong>Winter:</strong> 18. Dezember – 2. Januar</li>
         `;
