@@ -52,10 +52,3 @@ Single HTML file (`index.html`) with embedded CSS and JavaScript:
 - Client-side date calculations
 - Responsive design for all devices
 
-## Project Documentation
-
-The `/memory-bank/` directory contains additional context:
-- `projectbrief.md` - Legal requirements and ZPO rules
-- `productContext.md` - User experience goals
-- `techContext.md` - Technical constraints
-- `systemPatterns.md` - Architecture patterns
