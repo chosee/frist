@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schweizer Fristenrechner - Rechtsmittelfristen einfach berechnen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2c5282;
+            --accent-color: #e53e3e;
+            --text-color: #2d3748;
+            --light-bg: #f7fafc;
+            --border-color: #e2e8f0;
+            --success-color: #48bb78;
+            --warning-color: #ecc94b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .calculator-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .steps {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            flex: 1;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-number {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .required::after {
+            content: '*';
+            color: var(--accent-color);
+            margin-left: 4px;
+        }
+
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .checkbox-group {
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .result {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-summary {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+        }
+
+        .timeline-container {
+            margin-top: 1.5rem;
+        }
+
+        .timeline-header {
+            margin-bottom: 1rem;
+        }
+
+        .timeline-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot.normal { background-color: #48bb78; }
+        .dot.weekend { background-color: #ed8936; }
+        .dot.holiday { background-color: #e53e3e; }
+        .dot.court-holiday { background-color: #4299e1; }
+        .dot.skipped { background-color: #718096; }
+
+        .timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 6px;
+        }
+
+        .date-box {
+            padding: 0.75rem;
+            border-radius: 6px;
+            min-width: 120px;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .date-box.normal { background-color: #48bb78; }
+        .date-box.weekend { background-color: #ed8936; }
+        .date-box.holiday { background-color: #e53e3e; }
+        .date-box.court-holiday { background-color: #4299e1; }
+        .date-box.skipped { background-color: #718096; }
+
+        .date-box .date {
+            font-weight: bold;
+        }
+
+        .date-box .day-info {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .date-box .count {
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .timeline {
+                gap: 0.25rem;
+            }
+
+            .date-box {
+                min-width: calc(50% - 0.25rem);
+                padding: 0.5rem;
+            }
+        }
+
+        .info-section {
+            margin-top: 3rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .info-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .warning {
+            background-color: #fff5f5;
+            border-left: 4px solid var(--warning-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .warning i {
+            color: var(--warning-color);
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .steps {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        .info-alert {
+            background-color: #ebf8ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .info-alert i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .form-hint {
+            display: block;
+            color: #666;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .warning-card {
+            background-color: #fff5f5;
+            border-left: 4px solid var(--warning-color);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-card h3 {
+            color: var(--warning-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .warning-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .warning-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .warning-card li::before {
+            content: "•";
+            color: var(--warning-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .law-text {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .law-text p {
+            margin-bottom: 1rem;
+        }
+
+        .law-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .warning-box {
+            background: #fff5f5;
+            padding: 1rem;
+            border-radius: 6px;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .warning-box i {
+            color: var(--warning-color);
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .important-ruling {
+            background: #ebf8ff;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .ruling-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(66, 153, 225, 0.2);
+        }
+
+        .ruling-details ul {
+            margin-top: 0.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .ruling-details li {
+            margin-bottom: 0.5rem;
+        }
+
+        .holiday-section {
+            margin-top: 1rem;
+        }
+
+        .holiday-section h4 {
+            color: var(--primary-color);
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        .holiday-section h4:first-child {
+            margin-top: 0;
+        }
+
+        .holiday-section ul {
+            list-style-type: none;
+            padding-left: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .holiday-section li {
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .holiday-section li::before {
+            content: "•";
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .holiday-note {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .holiday-section ul {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .holiday-selection {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+        }
+
+        .holiday-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .holiday-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .holiday-category h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .holiday-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checkbox-label:hover {
+            color: var(--primary-color);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .holiday-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            max-width: 200px;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                max-width: 150px;
+            }
+        }
+
+        .date-box.last-day {
+            background-color: var(--primary-color);
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 10px rgba(229, 62, 62, 0.3);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .weekday-header {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            padding: 0.5rem;
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .date-box {
+            min-width: 0;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .date-box .date {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .date-box .count {
+            font-size: 0.75rem;
+        }
+
+        .empty-day {
+            background: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .date-box {
+                padding: 0.25rem;
+                font-size: 0.75rem;
+            }
+            
+            .weekday-header {
+                padding: 0.25rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        .frist-info {
+            display: block;
+            margin-top: 0.5rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        optgroup {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        input[type="date"] {
+            position: relative;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        /* Für Firefox */
+        input[type="date"]::-moz-calendar-picker-indicator {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .result-actions {
+            margin-bottom: 1rem;
+        }
+
+        .print-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--secondary-color);
+        }
+
+        .print-button i {
+            font-size: 1.1rem;
+        }
+
+        /* Druckspezifische Styles */
+        @media print {
+            /* Grundlegende Seiteneinstellungen */
+            @page {
+                margin: 2cm;
+                size: A4;
+            }
+
+            /* Ausblenden aller nicht zu druckenden Elemente */
+            .steps,
+            .calculator-card form,
+            .info-section,
+            .result-actions,
+            .warning {
+                display: none !important;
+            }
+
+            /* Sicherstellen, dass der Container sichtbar ist */
+            .container {
+                display: block !important;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Logo-Bereich */
+            .logo-container {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            /* Ergebnisbereich */
+            .result {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+
+            .result-summary {
+                background-color: white !important;
+                color: black !important;
+                border: 1px solid #ccc;
+                padding: 1rem;
+                margin-bottom: 2rem;
+                page-break-inside: avoid;
+            }
+
+            /* Kalender-Grid */
+            .timeline-container {
+                page-break-inside: avoid;
+            }
+
+            .calendar-grid {
+                display: grid !important;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 4px;
+                border: 1px solid #ccc;
+                margin-bottom: 4px;
+            }
+
+            .timeline {
+                display: grid !important;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 4px;
+                border: 1px solid #ccc;
+            }
+
+            /* Datumsboxen im Druck */
+            .date-box {
+                border: 1px solid #ccc;
+                color: black !important;
+                background-color: white !important;
+                page-break-inside: avoid;
+            }
+
+            .date-box.normal { 
+                border: 1px solid #4299e1;
+            }
+            
+            .date-box.weekend { 
+                background-color: #f7fafc !important;
+                border: 1px solid #ed8936;
+            }
+            
+            .date-box.holiday { 
+                background-color: #fff5f5 !important;
+                border: 1px solid #e53e3e;
+            }
+            
+            .date-box.last-day { 
+                background-color: #ebf8ff !important;
+                border: 2px solid #1a365d;
+                font-weight: bold;
+            }
+
+            /* Fußzeile */
+            .print-footer {
+                display: block !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                padding: 1rem;
+                font-size: 0.8rem;
+                border-top: 1px solid #ccc;
+                background: white;
+            }
+
+            /* Allgemeine Textanpassungen */
+            body {
+                color: black !important;
+                background: white !important;
+            }
+
+            h1, h2, h3, h4 {
+                color: black !important;
+            }
+
+            /* Legende für den Druck */
+            .timeline-legend {
+                display: flex !important;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                border: 1px solid #ccc;
+                padding: 0.5rem;
+                background: white;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .disclaimer-text {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .disclaimer-text p {
+            margin-bottom: 1rem;
+        }
+
+        .disclaimer-text ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .disclaimer-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        .accept-button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .accept-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media print {
+            .modal {
+                display: none !important;
+            }
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0 3rem 0;
+            padding: 0 1rem;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .step-icon {
+            position: relative;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-icon i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            opacity: 0.8;
+        }
+
+        .step-number {
+            background: var(--accent-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step-content h3 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .step-content p {
+            color: var(--text-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        @media (max-width: 968px) {
+            .steps-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .step-card {
+                padding: 1.25rem;
+            }
+        }
+
+        .info-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 0 1rem;
+        }
+
+        .info-step-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .info-step-card.highlight::before {
+            background: linear-gradient(90deg, var(--accent-color), #f56565);
+        }
+
+        .info-step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-step-card .step-icon {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-step-card .step-icon i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            opacity: 0.8;
+        }
+
+        .info-step-card.highlight .step-icon i {
+            color: var(--accent-color);
+        }
+
+        .info-step-card h3 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .info-step-card.highlight h3 {
+            color: var(--accent-color);
+        }
+
+        .info-step-card p {
+            color: var(--text-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .info-step-card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .info-step-card li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .info-step-card li::before {
+            content: "•";
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .info-step-card.highlight li::before {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .info-cards-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        .law-section {
+            margin: 4rem 0;
+            padding: 0 1rem;
+        }
+
+        .law-section h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .law-subtitle {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .law-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .law-header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            padding: 1rem 1.5rem;
+            color: white;
+        }
+
+        .law-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .law-content {
+            padding: 1.5rem;
+        }
+
+        .law-content ol {
+            list-style-type: none;
+            counter-reset: item;
+            padding-left: 0;
+        }
+
+        .law-content > ol > li {
+            counter-increment: item;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .law-content > ol > li:before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .law-content ol ol {
+            margin-top: 0.5rem;
+            margin-left: 1rem;
+        }
+
+        .law-content ol[type="a"] {
+            list-style-type: lower-alpha;
+            padding-left: 1.5rem;
+        }
+
+        .law-content ol[type="a"] li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .law-section {
+                margin: 2rem 0;
+            }
+
+            .law-content {
+                padding: 1rem;
+            }
+        }
+
+        .info-tooltip {
+            cursor: help;
+            color: var(--primary-color);
+        }
+
+        .info-tooltip i {
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .date-box {
+            position: relative;
+        }
+
+        .date-box .day-info {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            cursor: help;
+        }
+
+        .date-box .day-info i {
+            font-size: 0.9rem;
+        }
+
+        /* Tooltip Styling */
+        .date-box .day-info:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .date-box .day-info:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 90%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        /* Anpassung der Abstände in der Datumsbox */
+        .date-box {
+            padding: 0.5rem;
+            gap: 0.2rem;
+        }
+
+        .date-box .date {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .date-box .month {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .day-count {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="https://www.cap.ch/content/dam/onemarketing/azch/allianz-logo/CAP_Logo_Web_NEW.png" 
+                 alt="CAP Rechtsschutz Logo"
+                 class="logo">
+        </div>
+
+        <h1>Schweizer Fristenrechner</h1>
+        
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-day"></i>
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-content">
+                    <h3>Zustellungsdatum erfassen</h3>
+                    <p>Ermitteln Sie das genaue Datum der Zustellung des fristauslösenden Dokuments. Bei A-Post Plus beachten Sie bitte den Sendebericht.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-clock"></i>
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-content">
+                    <h3>Frist auswählen</h3>
+                    <p>Wählen Sie die entsprechende Frist (Tage oder Monate) und geben Sie an, ob Gerichtsferien oder spezielle Feiertage zu berücksichtigen sind.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-gavel"></i>
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-content">
+                    <h3>Frist sichern</h3>
+                    <p>Stellen Sie die rechtzeitige Einreichung sicher. Im Zweifelsfall empfehlen wir, sich von einer Rechtsanwältin oder einem Rechtsanwalt beraten zu lassen.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-card">
+            <form id="fristForm">
+                <div class="form-group">
+                    <label for="startDate" class="required">Zustellungsdatum des Entscheids</label>
+                    <input type="text" 
+                           id="startDate" 
+                           name="startDate"
+                           required 
+                           title="Datum der Zustellung des Entscheids"
+                           aria-describedby="dateHint"
+                           pattern="\d{2}\.\d{2}\.\d{4}"
+                           onchange="formatDate(this)">
+                    <small id="dateHint" class="form-hint">Format: TT.MM.JJJJ</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="fristType" class="required">Art der Frist</label>
+                    <select id="fristType" 
+                            name="fristType"
+                            required 
+                            title="Wählen Sie die Art der Frist"
+                            onchange="toggleCustomFrist()">
+                        <option value="">Bitte wählen...</option>
+                        <optgroup label="Tagesfristen">
+                            <option value="days_10">Einsprachefrist (10 Tage)</option>
+                            <option value="days_20">Rekursfrist (20 Tage)</option>
+                            <option value="days_30">Beschwerdefrist (30 Tage)</option>
+                            <option value="days_custom">Individuelle Tagesfrist</option>
+                        </optgroup>
+                        <optgroup label="Monatsfristen">
+                            <option value="months_1">1 Monat</option>
+                            <option value="months_3">3 Monate</option>
+                            <option value="months_custom">Individuelle Monatsfrist</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group" id="customDaysGroup" style="display: none;">
+                    <label for="customDays" class="required">Anzahl Tage</label>
+                    <input type="number" 
+                           id="customDays" 
+                           name="customDays"
+                           min="1" 
+                           max="365"
+                           title="Geben Sie die Anzahl Tage ein"
+                           class="form-control">
+                </div>
+
+                <div class="form-group" id="customMonthsGroup" style="display: none;">
+                    <label for="customMonths" class="required">Anzahl Monate</label>
+                    <input type="number" 
+                           id="customMonths" 
+                           name="customMonths"
+                           min="1" 
+                           max="12"
+                           title="Geben Sie die Anzahl Monate ein"
+                           class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label>Gerichtsferien berücksichtigen</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="gerichtsferien">
+                            Fristenstillstand während der Gerichtsferien beachten
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Zu berücksichtigende Feiertage</label>
+                    <div class="holiday-selection">
+                        <div class="holiday-category">
+                            <h4>Nationale Feiertage</h4>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="all_national" checked>
+                                    Alle nationalen Feiertage
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="holiday-category">
+                            <h4>Kantonale Feiertage</h4>
+                            <div class="checkbox-group holiday-grid">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="berchtoldstag">
+                                    Berchtoldstag (2. Januar)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="dreikoenige">
+                                    Heilige Drei Könige (6. Januar)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="josephstag">
+                                    Josephstag (19. März)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="karfreitag">
+                                    Karfreitag
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="ostermontag">
+                                    Ostermontag
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="tag_der_arbeit">
+                                    Tag der Arbeit (1. Mai)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="pfingstmontag">
+                                    Pfingstmontag
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="fronleichnam">
+                                    Fronleichnam
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="maria_himmelfahrt">
+                                    Mariä Himmelfahrt (15. August)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="allerheiligen">
+                                    Allerheiligen (1. November)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="maria_empfaengnis">
+                                    Maria Empfängnis (8. Dezember)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="stephanstag">
+                                    Stephanstag (26. Dezember)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Bitte beachten Sie: Dieser Rechner dient nur zur Orientierung. Für die Wahrung von Fristen sind Sie selbst verantwortlich.
+                </div>
+
+                <button type="submit">Frist berechnen</button>
+            </form>
+
+            <div id="result" class="result">
+                <div class="result-actions">
+                    <button type="button" onclick="window.print()" class="print-button">
+                        <i class="fas fa-print"></i> Resultat drucken
+                    </button>
+                </div>
+                <div class="result-summary"></div>
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <div class="timeline-legend">
+                            <span class="legend-item"><span class="dot normal"></span> Normaler Tag</span>
+                            <span class="legend-item"><span class="dot weekend"></span> Wochenende</span>
+                            <span class="legend-item"><span class="dot holiday"></span> Feiertag</span>
+                            <span class="legend-item"><span class="dot last-day"></span> Fristende</span>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="weekday-header">Mo</div>
+                        <div class="weekday-header">Di</div>
+                        <div class="weekday-header">Mi</div>
+                        <div class="weekday-header">Do</div>
+                        <div class="weekday-header">Fr</div>
+                        <div class="weekday-header">Sa</div>
+                        <div class="weekday-header">So</div>
+                    </div>
+                    <div class="timeline"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-cards-container">
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Fristberechnung</h3>
+                    <p>Die Frist beginnt am Tag nach der Zustellung zu laufen. Fällt der letzte Tag der Frist auf einen Samstag, Sonntag oder staatlich anerkannten Feiertag, so endet die Frist am nächstfolgenden Werktag.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card highlight">
+                <div class="step-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Wichtiger Hinweis</h3>
+                    <p>Gemäss Urteil des Bundesgerichts 5A_691/2023 vom 13. August 2024 beginnt die Frist nach Monaten am Tag des fristauslösenden Ereignisses und nicht am Folgetag.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Gerichtsferien</h3>
+                    <p>Die Gerichtsferien dauern:</p>
+                    <ul>
+                        <li>7 Tage vor bis und mit 7 Tage nach Ostern</li>
+                        <li>15. Juli bis und mit 15. August</li>
+                        <li>18. Dezember bis und mit 2. Januar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Kantonale Feiertage</h3>
+                    <p>Neben den nationalen Feiertagen gelten je nach Kanton unterschiedliche Feiertage. Diese werden in der Berechnung berücksichtigt.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="law-section">
+            <h2>Gesetzliche Grundlagen</h2>
+            <p class="law-subtitle">Schweizerische Zivilprozessordnung (ZPO)</p>
+            
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 142 Beginn und Berechnung</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Fristen, die durch eine Mitteilung oder den Eintritt eines Ereignisses ausgelöst werden, beginnen am folgenden Tag zu laufen.</li>
+                        <li>Berechnet sich eine Frist nach Monaten, so endet sie im letzten Monat an dem Tag, der dieselbe Zahl trägt wie der Tag, an dem die Frist zu laufen begann. Fehlt der entsprechende Tag, so endet die Frist am letzten Tag des Monats.</li>
+                        <li>Fällt der letzte Tag einer Frist auf einen Samstag, einen Sonntag oder einen am Gerichtsort vom Bundesrecht oder vom kantonalen Recht anerkannten Feiertag, so endet sie am nächsten Werktag.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 143 Einhaltung</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Eingaben müssen spätestens am letzten Tag der Frist beim Gericht eingereicht oder zu dessen Handen der Schweizerischen Post oder einer schweizerischen diplomatischen oder konsularischen Vertretung übergeben werden.</li>
+                        <li>Bei elektronischer Einreichung ist für die Wahrung einer Frist der Zeitpunkt massgebend, in dem die Quittung ausgestellt wird, die bestätigt, dass alle Schritte abgeschlossen sind, die auf der Seite der Partei für die Übermittlung notwendig sind.</li>
+                        <li>Die Frist für eine Zahlung an das Gericht ist eingehalten, wenn der Betrag spätestens am letzten Tag der Frist zugunsten des Gerichts der Schweizerischen Post übergeben oder einem Post- oder Bankkonto in der Schweiz belastet worden ist.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 144 Erstreckung</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Gesetzliche Fristen können nicht erstreckt werden.</li>
+                        <li>Gerichtliche Fristen können aus zureichenden Gründen erstreckt werden, wenn das Gericht vor Fristablauf darum ersucht wird.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 145 Stillstand der Fristen</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Gesetzliche und gerichtliche Fristen stehen still:
+                            <ol type="a">
+                                <li>vom siebten Tag vor Ostern bis und mit dem siebten Tag nach Ostern;</li>
+                                <li>vom 15. Juli bis und mit dem 15. August;</li>
+                                <li>vom 18. Dezember bis und mit dem 2. Januar.</li>
+                            </ol>
+                        </li>
+                        <li>Dieser Fristenstillstand gilt nicht für:
+                            <ol type="a">
+                                <li>das Schlichtungsverfahren;</li>
+                                <li>das summarische Verfahren.</li>
+                            </ol>
+                        </li>
+                        <li>Die Parteien sind auf die Ausnahmen nach Absatz 2 hinzuweisen.</li>
+                        <li>Vorbehalten bleiben die Bestimmungen des SchKG über die Betreibungsferien und den Rechtsstillstand.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-header" style="display: none;">
+        <img src="https://www.cap.ch/content/dam/onemarketing/azch/allianz-logo/CAP_Logo_Web_NEW.png" 
+             alt="CAP Rechtsschutz Logo">
+        <h2>Fristberechnung</h2>
+    </div>
+
+    <div class="print-footer" style="display: none;">
+        <p>Erstellt mit dem CAP Fristenrechner • Datum: ${new Date().toLocaleDateString('de-CH')}</p>
+        <p>Dieser Ausdruck dient nur zur Orientierung. Für die Wahrung von Fristen sind Sie selbst verantwortlich.</p>
+    </div>
+
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <h2>Rechtlicher Hinweis</h2>
+            <div class="disclaimer-text">
+                <p><strong>Haftungsausschluss und Nutzungsbedingungen</strong></p>
+                <p>Die CAP Rechtsschutz-Versicherungsgesellschaft AG (nachfolgend "CAP") stellt diesen Fristenrechner als unverbindliches Hilfsmittel zur Verfügung. Trotz sorgfältiger Entwicklung und regelmässiger Wartung kann die CAP keine Gewähr für die Richtigkeit, Vollständigkeit und Aktualität der Berechnungen und Informationen übernehmen.</p>
+                
+                <p>Insbesondere wird darauf hingewiesen:</p>
+                <ul>
+                    <li>Die Berechnung dient ausschliesslich der Orientierung und ersetzt keine rechtliche Beratung.</li>
+                    <li>Für die Wahrung von Fristen sind ausschliesslich Sie selbst verantwortlich.</li>
+                    <li>Im Zweifelsfall sollten Sie sich von einer qualifizierten Rechtsanwältin oder einem qualifizierten Rechtsanwalt beraten lassen.</li>
+                    <li>Die CAP schliesst jegliche Haftung für Schäden aus, die sich aus der Nutzung dieses Fristenrechners ergeben könnten.</li>
+                </ul>
+
+                <p>Mit der Nutzung des Fristenrechners akzeptieren Sie diese Bedingungen.</p>
+            </div>
+            <button onclick="acceptDisclaimer()" class="accept-button">
+                Ich habe den Hinweis gelesen und akzeptiere die Bedingungen
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#startDate", {
+                dateFormat: "d.m.Y",
+                defaultDate: new Date(),
+                locale: {
+                    firstDayOfWeek: 1, // Start week on Monday
+                    weekdays: {
+                        shorthand: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+                        longhand: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+                    },
+                    months: {
+                        shorthand: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+                        longhand: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                    },
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function toggleCustomFrist() {
+            const fristType = document.getElementById('fristType').value;
+            const customDaysGroup = document.getElementById('customDaysGroup');
+            const customMonthsGroup = document.getElementById('customMonthsGroup');
+            
+            customDaysGroup.style.display = 'none';
+            customMonthsGroup.style.display = 'none';
+            document.getElementById('customDays').required = false;
+            document.getElementById('customMonths').required = false;
+            
+            if (fristType === 'days_custom') {
+                customDaysGroup.style.display = 'block';
+                document.getElementById('customDays').required = true;
+            } else if (fristType === 'months_custom') {
+                customMonthsGroup.style.display = 'block';
+                document.getElementById('customMonths').required = true;
+            }
+        }
+
+        function calculateDeadline(startDate, fristType, customValue) {
+            let endDate;
+            
+            // Erste Berechnung des Enddatums (ohne Gerichtsferien)
+            if (fristType.startsWith('months_')) {
+                // Monatsfrist: Beginnt AM TAG der Zustellung
+                const months = customValue || parseInt(fristType.split('_')[1]);
+                
+                // Zielmonat und -jahr berechnen
+                const targetMonth = startDate.getMonth() + months;
+                const targetYear = startDate.getFullYear() + Math.floor(targetMonth / 12);
+                const normalizedTargetMonth = targetMonth % 12;
+                
+                // Letzter Tag des Zielmonats
+                const lastDayOfTargetMonth = new Date(targetYear, normalizedTargetMonth + 1, 0).getDate();
+                
+                // Wenn der ursprüngliche Tag größer ist als die Anzahl Tage im Zielmonat,
+                // nehmen wir den letzten Tag des Zielmonats
+                const targetDay = Math.min(startDate.getDate(), lastDayOfTargetMonth);
+                
+                // Neues Enddatum erstellen
+                endDate = new Date(targetYear, normalizedTargetMonth, targetDay);
+            } else {
+                // Tagesfrist: Beginnt am Tag NACH der Zustellung
+                endDate = new Date(startDate);
+                const days = customValue || parseInt(fristType.split('_')[1]);
+                endDate.setDate(endDate.getDate() + days + 1);
+            }
+            
+            // Wenn Gerichtsferien berücksichtigt werden sollen
+            if (document.getElementById('gerichtsferien').checked) {
+                // Zähle einfach die blauen Tage zwischen Start und Ende
+                let courtHolidayCount = 0;
+                let currentDate = new Date(startDate);
+                
+                while (currentDate <= endDate) {
+                    if (isInCourtHolidays(currentDate)) {
+                        courtHolidayCount++;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                // Verlängere die Frist um die Anzahl der Gerichtsferientage
+                if (courtHolidayCount > 0) {
+                    endDate.setDate(endDate.getDate() + courtHolidayCount);
+                }
+            }
+            
+            // Prüfe auf Wochenende/Feiertage am Ende
+            while (isWeekendOrHoliday(endDate)) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+            
+            return endDate;
+        }
+
+        function displayResult(startDate, endDate, fristType, customValue) {
+            const result = document.getElementById('result');
+            const resultSummary = result.querySelector('.result-summary');
+            
+            // Berechne das Enddatum ohne Gerichtsferien
+            let endDateWithoutCourtHolidays = new Date(startDate);
+            if (fristType.startsWith('months_')) {
+                const months = customValue || parseInt(fristType.split('_')[1]);
+                const targetMonth = startDate.getMonth() + months;
+                const targetYear = startDate.getFullYear() + Math.floor(targetMonth / 12);
+                const normalizedTargetMonth = targetMonth % 12;
+                const lastDayOfTargetMonth = new Date(targetYear, normalizedTargetMonth + 1, 0).getDate();
+                const targetDay = Math.min(startDate.getDate(), lastDayOfTargetMonth);
+                endDateWithoutCourtHolidays = new Date(targetYear, normalizedTargetMonth, targetDay);
+            } else {
+                const days = customValue || parseInt(fristType.split('_')[1]);
+                endDateWithoutCourtHolidays.setDate(endDateWithoutCourtHolidays.getDate() + days + 1);
+            }
+            
+            // Berechne die Anzahl der Tage ohne Gerichtsferien
+            let totalDays = 0;
+            let tempDate = new Date(startDate);
+            while (tempDate <= endDateWithoutCourtHolidays) {
+                totalDays++;
+                tempDate.setDate(tempDate.getDate() + 1);
+            }
+            
+            // Berechne die Anzahl der Gerichtsferientage
+            let courtHolidayDays = 0;
+            if (document.getElementById('gerichtsferien').checked) {
+                let currentDate = new Date(startDate);
+                while (currentDate <= endDateWithoutCourtHolidays) {
+                    if (isInCourtHolidays(currentDate)) {
+                        courtHolidayDays++;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                // Korrigiere das Enddatum mit Friststillstand
+                endDate = new Date(endDateWithoutCourtHolidays);
+                endDate.setDate(endDate.getDate() + courtHolidayDays);
+                
+                // Prüfe auf Wochenende/Feiertage am Ende
+                while (isWeekendOrHoliday(endDate)) {
+                    endDate.setDate(endDate.getDate() + 1);
+                }
+            }
+            
+            // Fristtyp für die Anzeige formatieren
+            let fristText = '';
+            if (fristType.startsWith('months_')) {
+                const months = customValue || parseInt(fristType.split('_')[1]);
+                fristText = `${months} ${months === 1 ? 'Monat' : 'Monate'}`;
+            } else {
+                const days = customValue || parseInt(fristType.split('_')[1]);
+                fristText = `${days} ${days === 1 ? 'Tag' : 'Tage'}`;
+            }
+            
+            // Zusammenfassung anzeigen
+            const fristInfo = `
+                <h3>Fristberechnung:</h3>
+                <p><strong>Zustellung:</strong> ${startDate.toLocaleDateString('de-CH', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })}</p>
+                <p><strong>Gewählte Frist:</strong> ${fristText}</p>
+                <p><strong>${fristType.startsWith('months_') ? 'Monatsfrist' : 'Tagesfrist'}:</strong> 
+                    ${fristType.startsWith('months_') 
+                        ? 'Frist beginnt am Tag der Zustellung'
+                        : 'Frist beginnt am Tag nach der Zustellung'
+                    }</p>
+                <p><strong>Gewählte Frist in Tage:</strong> ${totalDays} Tage</p>
+                ${document.getElementById('gerichtsferien').checked ? `
+                    <p><strong>Gerichtsferien:</strong> ${courtHolidayDays} ${courtHolidayDays === 1 ? 'Tag' : 'Tage'} in der Fristperiode</p>
+                    <p><strong>Fristende (ohne Friststillstand):</strong> ${endDateWithoutCourtHolidays.toLocaleDateString('de-CH', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}</p>
+                ` : ''}
+                <p><strong>Fristende${document.getElementById('gerichtsferien').checked ? ' (mit Friststillstand)' : ''}:</strong> ${endDate.toLocaleDateString('de-CH', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })}</p>
+            `;
+            
+            resultSummary.innerHTML = fristInfo;
+
+            // Timeline leeren und neu aufbauen
+            const timeline = result.querySelector('.timeline');
+            timeline.innerHTML = '';
+
+            // Startdatum auf Montag der Woche setzen
+            let currentDate = new Date(startDate);
+            currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1);
+            if (currentDate.getDay() === 0) {
+                currentDate.setDate(currentDate.getDate() - 7);
+            }
+
+            // Kalenderdarstellung mit separatem Tageszähler
+            let displayDayCount = 0;
+
+            while (currentDate <= endDate) {
+                for (let i = 0; i < 7; i++) {
+                    const dateBox = document.createElement('div');
+                    const isRelevantDate = currentDate >= startDate && currentDate <= endDate;
+                    const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6;
+                    const isHoliday = isHolidayDate(currentDate);
+                    const isLastDay = currentDate.getTime() === endDate.getTime();
+                    
+                    let dateClass = 'empty-day';
+                    let dayInfo = '';
+                    
+                    if (isRelevantDate) {
+                        if (isLastDay) {
+                            dateClass = 'last-day';
+                            dayInfo = 'Fristende';
+                            displayDayCount++;
+                        } else if (isInCourtHolidays(currentDate)) {
+                            dateClass = 'court-holiday';
+                            dayInfo = 'Gerichtsferien';
+                            displayDayCount++;
+                        } else if (isWeekend) {
+                            dateClass = 'weekend';
+                            dayInfo = 'Wochenende';
+                            displayDayCount++;
+                        } else if (isHoliday) {
+                            dateClass = 'holiday';
+                            dayInfo = 'Feiertag';
+                            displayDayCount++;
+                        } else {
+                            dateClass = 'normal';
+                            // Nur erhöhen wenn es nicht der Zustellungstag bei einer Tagesfrist ist
+                            if (!(currentDate.getTime() === startDate.getTime() && !fristType.startsWith('months_'))) {
+                                displayDayCount++;
+                            }
+                        }
+                    }
+
+                    dateBox.className = `date-box ${dateClass}`;
+                    if (isRelevantDate) {
+                        dateBox.innerHTML = `
+                            <span class="date">${currentDate.getDate()}</span>
+                            <span class="month">${currentDate.toLocaleDateString('de-CH', { month: 'short' })}</span>
+                            <span class="day-info" title="${dayInfo || 'Normaler Tag'}">
+                                ${getIconForDayType(dateClass)}
+                            </span>
+                            ${displayDayCount > 0 ? `<span class="day-count">Tag ${displayDayCount}</span>` : ''}
+                        `;
+                    }
+
+                    timeline.appendChild(dateBox);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            }
+
+            result.style.display = 'block';
+        }
+
+        // Event Listener aktualisieren
+        document.getElementById('fristForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dateInput = document.getElementById('startDate');
+            let startDate;
+            
+            // Parsen des Datums im korrekten Format
+            if (dateInput.type === 'date') {
+                startDate = new Date(dateInput.value);
+            } else {
+                // Parse das formatierte Datum (TT.MM.YYYY)
+                const [day, month, year] = dateInput.value.split('.');
+                startDate = new Date(year, month - 1, day);
+            }
+            
+            const fristType = document.getElementById('fristType').value;
+            let customValue = null;
+            
+            if (fristType === 'days_custom') {
+                customValue = parseInt(document.getElementById('customDays').value);
+            } else if (fristType === 'months_custom') {
+                customValue = parseInt(document.getElementById('customMonths').value);
+            }
+            
+            if (!fristType || (customValue === null && (fristType === 'days_custom' || fristType === 'months_custom'))) {
+                alert('Bitte geben Sie eine gültige Frist ein.');
+                return;
+            }
+
+            const endDate = calculateDeadline(startDate, fristType, customValue);
+            displayResult(startDate, endDate, fristType, customValue);
+        });
+
+        // Erweiterte isWeekendOrHoliday Funktion
+        function isWeekendOrHoliday(date) {
+            // Wochenende prüfen
+            if (date.getDay() === 0 || date.getDay() === 6) return true;
+            
+            const dateString = date.toISOString().split('T')[0];
+            const selectedHolidays = getSelectedHolidays();
+            
+            return selectedHolidays.includes(dateString);
+        }
+
+        function getSelectedHolidays() {
+            const holidays = [];
+            const year = new Date().getFullYear();
+            
+            // Nationale Feiertage
+            const nationalHolidaysCheckbox = document.querySelector('input[value="all_national"]');
+            if (nationalHolidaysCheckbox && nationalHolidaysCheckbox.checked) {
+                holidays.push(
+                    `${year}-01-01`, // Neujahr
+                    `${year}-05-09`, // Auffahrt (Datum muss dynamisch berechnet werden)
+                    `${year}-08-01`, // Nationalfeiertag
+                    `${year}-12-25`  // Weihnachten
+                );
+            }
+
+            // Kantonale Feiertage
+            const selectedKantonalHolidays = document.querySelectorAll('input[name="holidays"]:checked');
+            selectedKantonalHolidays.forEach(checkbox => {
+                if (checkbox.value === 'all_national') return; // Nationale Feiertage überspringen
+                
+                const holidayDates = {
+                    'berchtoldstag': `${year}-01-02`,
+                    'dreikoenige': `${year}-01-06`,
+                    'josephstag': `${year}-03-19`,
+                    'karfreitag': calculateEasterRelatedDate(year, -2),
+                    'ostermontag': calculateEasterRelatedDate(year, 1),
+                    'tag_der_arbeit': `${year}-05-01`,
+                    'pfingstmontag': calculateEasterRelatedDate(year, 50),
+                    'fronleichnam': calculateEasterRelatedDate(year, 60),
+                    'maria_himmelfahrt': `${year}-08-15`,
+                    'allerheiligen': `${year}-11-01`,
+                    'maria_empfaengnis': `${year}-12-08`,
+                    'stephanstag': `${year}-12-26`
+                };
+
+                if (holidayDates[checkbox.value]) {
+                    holidays.push(holidayDates[checkbox.value]);
+                }
+            });
+
+            return holidays;
+        }
+
+        // Hilfsfunktion zur Berechnung von Ostern und davon abhängigen Feiertagen
+        function calculateEasterRelatedDate(year, daysFromEaster) {
+            // Gaussche Osterformel
+            const a = year % 19;
+            const b = Math.floor(year / 100);
+            const c = year % 100;
+            const d = Math.floor(b / 4);
+            const e = b % 4;
+            const f = Math.floor((b + 8) / 25);
+            const g = Math.floor((b - f + 1) / 3);
+            const h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4);
+            const k = c % 4;
+            const l = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * l) / 451);
+            const month = Math.floor((h + l - 7 * m + 114) / 31);
+            const day = ((h + l - 7 * m + 114) % 31) + 1;
+
+            let easterDate = new Date(year, month - 1, day);
+            easterDate.setDate(easterDate.getDate() + daysFromEaster);
+            
+            return easterDate.toISOString().split('T')[0];
+        }
+
+        // Hilfsfunktionen für die Datumsüberprüfung
+        function isHolidayDate(date) {
+            const dateString = date.toISOString().split('T')[0];
+            const selectedHolidays = getSelectedHolidays();
+            return selectedHolidays.includes(dateString);
+        }
+
+        function isInCourtHolidays(date) {
+            if (!document.getElementById('gerichtsferien').checked) return false;
+            
+            const courtHolidays = calculateCourtHolidays(date.getFullYear());
+            return courtHolidays.some(holiday => 
+                holiday.getDate() === date.getDate() &&
+                holiday.getMonth() === date.getMonth() &&
+                holiday.getFullYear() === date.getFullYear()
+            );
+        }
+
+        function calculateCourtHolidays(year) {
+            const holidays = [];
+            
+            // Osterferien berechnen
+            const easter = calculateEasterDate(year);
+            const easterStart = new Date(easter);
+            easterStart.setDate(easter.getDate() - 7); // 7 Tage vor Ostern
+            const easterEnd = new Date(easter);
+            easterEnd.setDate(easter.getDate() + 7);   // 7 Tage nach Ostern
+
+            // Sommerferien (15. Juli - 15. August)
+            const summerStart = new Date(year, 6, 15);  // 15. Juli
+            const summerEnd = new Date(year, 7, 15);    // 15. August
+
+            // Winterferien (18. Dezember - 2. Januar)
+            // Für das aktuelle Jahr
+            const winterStart = new Date(year, 11, 18); // 18. Dezember
+            const winterEnd = new Date(year, 11, 31);   // 31. Dezember
+            
+            // Für das nächste Jahr (1. und 2. Januar)
+            const nextYearStart = new Date(year + 1, 0, 1); // 1. Januar
+            const nextYearEnd = new Date(year + 1, 0, 2);   // 2. Januar
+            
+            // Für das vorherige Jahr (1. und 2. Januar des aktuellen Jahres)
+            const prevYearStart = new Date(year, 0, 1);     // 1. Januar
+            const prevYearEnd = new Date(year, 0, 2);       // 2. Januar
+
+            // Alle Tage der Gerichtsferien sammeln
+            let currentDate = new Date(easterStart);
+            while (currentDate <= easterEnd) {
+                holidays.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            currentDate = new Date(summerStart);
+            while (currentDate <= summerEnd) {
+                holidays.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            // Winterferien aktuelles Jahr
+            currentDate = new Date(winterStart);
+            while (currentDate <= winterEnd) {
+                holidays.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            // Anfang des aktuellen Jahres (1. und 2. Januar)
+            currentDate = new Date(prevYearStart);
+            while (currentDate <= prevYearEnd) {
+                holidays.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            // Anfang des nächsten Jahres (1. und 2. Januar)
+            currentDate = new Date(nextYearStart);
+            while (currentDate <= nextYearEnd) {
+                holidays.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            return holidays;
+        }
+
+        function calculateEasterDate(year) {
+            // Gaussche Osterformel
+            const a = year % 19;
+            const b = Math.floor(year / 100);
+            const c = year % 100;
+            const d = Math.floor(b / 4);
+            const e = b % 4;
+            const f = Math.floor((b + 8) / 25);
+            const g = Math.floor((b - f + 1) / 3);
+            const h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4);
+            const k = c % 4;
+            const l = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * l) / 451);
+            const month = Math.floor((h + l - 7 * m + 114) / 31);
+            const day = ((h + l - 7 * m + 114) % 31) + 1;
+
+            return new Date(year, month - 1, day);
+        }
+
+        // Formatierung des Datums beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('startDate');
+            
+            // Set the current date as the default value in the German format
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            
+            // Set the HTML5 date format for the input
+            dateInput.value = `${year}-${month}-${day}`;
+            
+            // Localization of the datepicker
+            dateInput.addEventListener('focus', function() {
+                this.type = 'date';
+                this.style.width = 'auto';
+            });
+            
+            dateInput.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.type = 'text';
+                }
+            });
+        });
+
+        // Function to format the date
+        function formatDate(input) {
+            if (!input.value) return;
+
+            const date = new Date(input.value);
+            if (isNaN(date.getTime())) return;
+
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+
+            // Display the formatted date in the German format
+            const formattedDate = `${day}.${month}.${year}`;
+            
+            // Keep the HTML5 date format for the input value
+            input.setAttribute('data-formatted', formattedDate);
+            
+            // Update the visible value when the field is not focused
+            if (document.activeElement !== input) {
+                input.type = 'text';
+                input.value = formattedDate;
+            }
+        }
+
+        // Additional event listeners for date processing
+        document.getElementById('startDate').addEventListener('change', function() {
+            formatDate(this);
+        });
+
+        document.getElementById('fristForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dateInput = document.getElementById('startDate');
+            let startDate;
+            
+            // Parsen des Datums im korrekten Format
+            if (dateInput.type === 'date') {
+                startDate = new Date(dateInput.value);
+            } else {
+                // Parse das formatierte Datum (TT.MM.YYYY)
+                const [day, month, year] = dateInput.value.split('.');
+                startDate = new Date(year, month - 1, day);
+            }
+            
+            const fristType = document.getElementById('fristType').value;
+            let customValue = null;
+            
+            if (fristType === 'days_custom') {
+                customValue = parseInt(document.getElementById('customDays').value);
+            } else if (fristType === 'months_custom') {
+                customValue = parseInt(document.getElementById('customMonths').value);
+            }
+            
+            if (!fristType || (customValue === null && (fristType === 'days_custom' || fristType === 'months_custom'))) {
+                alert('Bitte geben Sie eine gültige Frist ein.');
+                return;
+            }
+
+            const endDate = calculateDeadline(startDate, fristType, customValue);
+            displayResult(startDate, endDate, fristType, customValue);
+        });
+
+        // Zeige den Disclaimer beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('disclaimerModal').style.display = 'block';
+            // Deaktiviere den Rest der Seite
+            document.querySelector('.container').style.pointerEvents = 'none';
+            document.querySelector('.container').style.opacity = '0.5';
+        });
+
+        function acceptDisclaimer() {
+            document.getElementById('disclaimerModal').style.display = 'none';
+            // Aktiviere den Rest der Seite wieder
+            document.querySelector('.container').style.pointerEvents = 'auto';
+            document.querySelector('.container').style.opacity = '1';
+        }
+
+        function getIconForDayType(dateClass) {
+            switch(dateClass) {
+                case 'weekend':
+                    return '<i class="fas fa-house"></i>';
+                case 'court-holiday':
+                    return '<i class="fas fa-gavel"></i>';
+                case 'holiday':
+                    return '<i class="fas fa-calendar-day"></i>';
+                case 'last-day':
+                    return '<i class="fas fa-flag-checkered"></i>';
+                case 'normal':
+                    return '<i class="fas fa-check"></i>';  // Icon für normale Tage
+                default:
+                    return '';
+            }
+        }
+    </script>
+</body>
+</html> 
