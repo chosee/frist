@@ -122,6 +122,18 @@ frist/
 - Hébergé sur Cloudflare Pages
 - Open Source
 
+## Testprotokoll | Protocole de test
+
+Die Berechnungslogik wurde gegen alle gesetzlichen Vorgaben (Art. 142-146 ZPO) geprüft:
+**[TESTPROTOKOLL.md](TESTPROTOKOLL.md)**
+
+La logique de calcul a été vérifiée par rapport à toutes les exigences légales (art. 142-146 CPC) :
+**[TESTPROTOKOLL.md](TESTPROTOKOLL.md)**
+
+```bash
+node test.js  # 16/16 Tests bestanden / tests réussis
+```
+
 ## Avertissement | Avertissement
 
 Ce calculateur sert uniquement d'orientation. Vous êtes seul responsable du respect des délais. En cas de doute, consultez un avocat.
