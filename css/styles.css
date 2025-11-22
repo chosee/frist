@@ -755,20 +755,32 @@
         @media print {
             /* Grundlegende Seiteneinstellungen */
             @page {
-                margin: 2cm;
+                margin: 1.5cm;
                 size: A4;
             }
 
             /* Ausblenden aller nicht zu druckenden Elemente */
-            .steps,
+            .steps-container,
             .calculator-card form,
-            .info-section,
+            .info-cards-container,
+            .law-section,
+            .site-footer,
             .result-actions,
-            .warning {
+            .language-switcher,
+            .header-row,
+            h1,
+            .modal {
                 display: none !important;
             }
 
-            /* Sicherstellen, dass der Container sichtbar ist */
+            /* Allgemeine Textanpassungen */
+            body {
+                color: black !important;
+                background: white !important;
+                font-size: 11pt;
+            }
+
+            /* Container */
             .container {
                 display: block !important;
                 width: 100% !important;
@@ -777,11 +789,32 @@
                 padding: 0 !important;
             }
 
-            /* Logo-Bereich */
-            .logo-container {
-                display: block !important;
-                text-align: center;
-                margin-bottom: 2rem;
+            /* Print Header anzeigen */
+            .print-header {
+                display: flex !important;
+                align-items: center;
+                gap: 1.5rem;
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 2px solid #1375bc;
+            }
+
+            .print-header img {
+                max-width: 120px;
+                height: auto;
+            }
+
+            .print-header h2 {
+                color: #1375bc !important;
+                font-size: 1.5rem;
+                margin: 0;
+            }
+
+            /* Calculator Card ohne Schatten */
+            .calculator-card {
+                box-shadow: none !important;
+                padding: 0 !important;
+                background: transparent !important;
             }
 
             /* Ergebnisbereich */
@@ -790,16 +823,34 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 box-shadow: none !important;
-                page-break-inside: avoid;
             }
 
             .result-summary {
-                background-color: white !important;
+                background-color: #f8f9fa !important;
                 color: black !important;
-                border: 1px solid #ccc;
-                padding: 1rem;
-                margin-bottom: 2rem;
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+                padding: 1rem 1.5rem;
+                margin-bottom: 1.5rem;
                 page-break-inside: avoid;
+            }
+
+            .result-summary h3 {
+                color: #1375bc !important;
+                font-size: 1.1rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .result-summary p {
+                margin: 0.4rem 0;
+                font-size: 10pt;
+            }
+
+            .result-summary p:last-child {
+                font-size: 12pt;
+                margin-top: 0.75rem;
+                padding-top: 0.75rem;
+                border-top: 1px solid #dee2e6;
             }
 
             /* Kalender-Grid */
@@ -807,82 +858,112 @@
                 page-break-inside: avoid;
             }
 
+            .timeline-header {
+                margin-bottom: 0.75rem;
+            }
+
+            .timeline-legend {
+                display: flex !important;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 0.75rem;
+                font-size: 9pt;
+            }
+
+            .legend-item .dot {
+                width: 10px;
+                height: 10px;
+                border: 1px solid #999;
+            }
+
             .calendar-grid {
                 display: grid !important;
                 grid-template-columns: repeat(7, 1fr);
-                gap: 4px;
-                border: 1px solid #ccc;
-                margin-bottom: 4px;
+                gap: 2px;
+                margin-bottom: 2px;
+            }
+
+            .weekday-header {
+                background: #e9ecef !important;
+                color: black !important;
+                font-size: 9pt;
+                padding: 0.3rem;
             }
 
             .timeline {
                 display: grid !important;
                 grid-template-columns: repeat(7, 1fr);
-                gap: 4px;
-                border: 1px solid #ccc;
+                gap: 2px;
             }
 
             /* Datumsboxen im Druck */
             .date-box {
-                border: 1px solid #ccc;
+                border: 1px solid #dee2e6;
                 color: black !important;
                 background-color: white !important;
-                page-break-inside: avoid;
+                font-size: 8pt;
+                padding: 0.25rem;
             }
 
-            .date-box.normal { 
-                border: 1px solid #4299e1;
+            .date-box .date {
+                font-size: 9pt;
             }
-            
-            .date-box.weekend { 
-                background-color: #f7fafc !important;
-                border: 1px solid #ed8936;
+
+            .date-box .count {
+                font-size: 7pt;
+                background: rgba(0,0,0,0.1) !important;
             }
-            
-            .date-box.holiday { 
-                background-color: #fff5f5 !important;
-                border: 1px solid #e53e3e;
+
+            .date-box.normal {
+                background-color: #d4edda !important;
+                border-color: #28a745;
             }
-            
-            .date-box.last-day { 
-                background-color: #ebf8ff !important;
-                border: 2px solid #1a365d;
+
+            .date-box.weekend {
+                background-color: #fff3cd !important;
+                border-color: #ffc107;
+            }
+
+            .date-box.holiday {
+                background-color: #f8d7da !important;
+                border-color: #dc3545;
+            }
+
+            .date-box.court-holiday {
+                background-color: #cce5ff !important;
+                border-color: #007bff;
+            }
+
+            .date-box.last-day {
+                background-color: #1375bc !important;
+                color: white !important;
+                border: 2px solid #0d5a91;
                 font-weight: bold;
             }
 
-            /* Fußzeile */
+            .date-box.last-day .count {
+                background: rgba(255,255,255,0.3) !important;
+                color: white !important;
+            }
+
+            .date-box.empty-day {
+                background: transparent !important;
+                border: none !important;
+            }
+
+            /* Print Footer */
             .print-footer {
                 display: block !important;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
+                margin-top: 1.5rem;
+                padding-top: 1rem;
+                border-top: 1px solid #dee2e6;
                 text-align: center;
-                padding: 1rem;
-                font-size: 0.8rem;
-                border-top: 1px solid #ccc;
-                background: white;
+                font-size: 8pt;
+                color: #6c757d !important;
             }
 
-            /* Allgemeine Textanpassungen */
-            body {
-                color: black !important;
-                background: white !important;
-            }
-
-            h1, h2, h3, h4 {
-                color: black !important;
-            }
-
-            /* Legende für den Druck */
-            .timeline-legend {
-                display: flex !important;
-                flex-wrap: wrap;
-                gap: 1rem;
-                margin-bottom: 1rem;
-                border: 1px solid #ccc;
-                padding: 0.5rem;
-                background: white;
+            .print-footer p {
+                margin: 0.25rem 0;
             }
         }
 

@@ -257,5 +257,13 @@ function generateCalendar(startDate, endDate, useCourtHolidays, selectedHolidays
 }
 
 function printResult() {
+    const lang = document.documentElement.lang || 'de';
+    const locale = lang === 'fr' ? 'fr-CH' : 'de-CH';
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const printDateEl = document.getElementById('printDate');
+    if (printDateEl) {
+        const prefix = lang === 'fr' ? 'Calculé le ' : 'Berechnet am ';
+        printDateEl.textContent = prefix + new Date().toLocaleDateString(locale, dateOptions);
+    }
     window.print();
 }
