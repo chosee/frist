@@ -7,14 +7,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --primary-color: #1a365d;
-            --secondary-color: #2c5282;
-            --accent-color: #e53e3e;
+            /* Durchblick Brand Colors */
+            --primary-color: #1375bc;
+            --primary-dark: #0d5a91;
+            --secondary-color: #3f6576;
+            --accent-color: #bc3c31;
             --text-color: #2d3748;
-            --light-bg: #f7fafc;
+            --light-bg: #f8fafc;
             --border-color: #e2e8f0;
-            --success-color: #48bb78;
-            --warning-color: #ecc94b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --weekend-color: #fca5a5;
+            --holiday-color: #fcd34d;
+            --court-holiday-color: #93c5fd;
         }
 
         * {
@@ -1162,6 +1167,39 @@
             margin-top: 0.2rem;
         }
 
+        /* Header Row with Language Switcher */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: var(--light-bg);
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
         /* Footer */
         .site-footer {
             background: var(--primary-color);
@@ -1201,13 +1239,19 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo-container">
-            <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
-                 alt="Durchblick Consultancy Logo"
-                 class="logo">
+        <div class="header-row">
+            <div class="logo-container">
+                <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
+                     alt="Durchblick Consultancy Logo"
+                     class="logo">
+            </div>
+            <div class="language-switcher">
+                <button onclick="setLanguage('de')" class="lang-btn active" id="lang-de">DE</button>
+                <button onclick="setLanguage('fr')" class="lang-btn" id="lang-fr">FR</button>
+            </div>
         </div>
 
-        <h1>Schweizer Fristenrechner</h1>
+        <h1 data-i18n="title">Schweizer Fristenrechner</h1>
         
         <div class="steps-container">
             <div class="step-card">
@@ -1593,6 +1637,285 @@
             </button>
         </div>
     </div>
+
+    <script>
+        // Translations
+        const translations = {
+            de: {
+                title: "Schweizer Fristenrechner",
+                step1_title: "Zustellungsdatum erfassen",
+                step1_text: "Ermitteln Sie das genaue Datum der Zustellung des fristauslösenden Dokuments. Bei A-Post Plus beachten Sie bitte den Sendebericht.",
+                step2_title: "Frist auswählen",
+                step2_text: "Wählen Sie die entsprechende Frist (Tage oder Monate) und geben Sie an, ob Gerichtsferien oder spezielle Feiertage zu berücksichtigen sind.",
+                step3_title: "Frist sichern",
+                step3_text: "Stellen Sie die rechtzeitige Einreichung sicher. Im Zweifelsfall empfehlen wir, sich von einer Rechtsanwältin oder einem Rechtsanwalt beraten zu lassen.",
+                label_date: "Zustellungsdatum des Entscheids",
+                label_frist: "Art der Frist",
+                label_procedure: "Verfahrensart (Art. 145 Abs. 2 ZPO)",
+                label_court_holidays: "Gerichtsferien berücksichtigen (Art. 145 ZPO)",
+                label_holidays: "Zu berücksichtigende Feiertage",
+                select_placeholder: "Bitte wählen...",
+                opt_days: "Tagesfristen",
+                opt_einsprache: "Einsprachefrist (10 Tage)",
+                opt_rekurs: "Rekursfrist (20 Tage)",
+                opt_beschwerde: "Beschwerdefrist (30 Tage)",
+                opt_days_custom: "Individuelle Tagesfrist",
+                opt_months: "Monatsfristen",
+                opt_month_1: "1 Monat",
+                opt_month_3: "3 Monate",
+                opt_months_custom: "Individuelle Monatsfrist",
+                opt_ordentlich: "Ordentliches Verfahren",
+                opt_vereinfacht: "Vereinfachtes Verfahren",
+                opt_summarisch: "Summarisches Verfahren (keine Gerichtsferien)",
+                opt_schlichtung: "Schlichtungsverfahren (keine Gerichtsferien)",
+                procedure_hint: "Bei ordentlichen und vereinfachten Verfahren gelten Gerichtsferien",
+                procedure_hint_no: "Gerichtsferien gelten nicht für dieses Verfahren (Art. 145 Abs. 2 ZPO)",
+                court_holiday_check: "Fristenstillstand während der Gerichtsferien beachten",
+                national_holidays: "Nationale Feiertage",
+                all_national: "Alle nationalen Feiertage",
+                cantonal_holidays: "Kantonale Feiertage",
+                warning: "Bitte beachten Sie: Dieser Rechner dient nur zur Orientierung. Für die Wahrung von Fristen sind Sie selbst verantwortlich.",
+                calculate: "Frist berechnen",
+                print: "Resultat drucken",
+                label_days: "Anzahl Tage",
+                label_months: "Anzahl Monate",
+                date_hint: "Format: TT.MM.JJJJ",
+                info_calc_title: "Fristberechnung",
+                info_calc_text: "Die Frist beginnt am Tag nach der Zustellung zu laufen. Fällt der letzte Tag der Frist auf einen Samstag, Sonntag oder staatlich anerkannten Feiertag, so endet die Frist am nächstfolgenden Werktag.",
+                info_important_title: "Wichtiger Hinweis",
+                info_important_text: "Gemäss Urteil des Bundesgerichts 5A_691/2023 vom 13. August 2024 beginnt die Frist nach Monaten am Tag des fristauslösenden Ereignisses und nicht am Folgetag.",
+                info_court_title: "Gerichtsferien",
+                info_court_text: "Die Gerichtsferien dauern:",
+                info_court_easter: "7 Tage vor bis und mit 7 Tage nach Ostern",
+                info_court_summer: "15. Juli bis und mit 15. August",
+                info_court_winter: "18. Dezember bis und mit 2. Januar",
+                info_cantonal_title: "Kantonale Feiertage",
+                info_cantonal_text: "Neben den nationalen Feiertagen gelten je nach Kanton unterschiedliche Feiertage. Diese werden in der Berechnung berücksichtigt.",
+                law_title: "Gesetzliche Grundlagen",
+                law_subtitle: "Schweizerische Zivilprozessordnung (ZPO)",
+                art142_title: "Art. 142 Beginn und Berechnung",
+                art142_1: "Fristen, die durch eine Mitteilung oder den Eintritt eines Ereignisses ausgelöst werden, beginnen am folgenden Tag zu laufen.",
+                art142_2: "Berechnet sich eine Frist nach Monaten, so endet sie im letzten Monat an dem Tag, der dieselbe Zahl trägt wie der Tag, an dem die Frist zu laufen begann. Fehlt der entsprechende Tag, so endet die Frist am letzten Tag des Monats.",
+                art142_3: "Fällt der letzte Tag einer Frist auf einen Samstag, einen Sonntag oder einen am Gerichtsort vom Bundesrecht oder vom kantonalen Recht anerkannten Feiertag, so endet sie am nächsten Werktag.",
+                art143_title: "Art. 143 Einhaltung",
+                art143_1: "Eingaben müssen spätestens am letzten Tag der Frist beim Gericht eingereicht oder zu dessen Handen der Schweizerischen Post oder einer schweizerischen diplomatischen oder konsularischen Vertretung übergeben werden.",
+                art143_2: "Bei elektronischer Einreichung ist für die Wahrung einer Frist der Zeitpunkt massgebend, in dem die Quittung ausgestellt wird, die bestätigt, dass alle Schritte abgeschlossen sind, die auf der Seite der Partei für die Übermittlung notwendig sind.",
+                art143_3: "Die Frist für eine Zahlung an das Gericht ist eingehalten, wenn der Betrag spätestens am letzten Tag der Frist zugunsten des Gerichts der Schweizerischen Post übergeben oder einem Post- oder Bankkonto in der Schweiz belastet worden ist.",
+                art144_title: "Art. 144 Erstreckung",
+                art144_1: "Gesetzliche Fristen können nicht erstreckt werden.",
+                art144_2: "Gerichtliche Fristen können aus zureichenden Gründen erstreckt werden, wenn das Gericht vor Fristablauf darum ersucht wird.",
+                art145_title: "Art. 145 Stillstand der Fristen",
+                art145_1: "Gesetzliche und gerichtliche Fristen stehen still:",
+                art145_1a: "vom siebten Tag vor Ostern bis und mit dem siebten Tag nach Ostern;",
+                art145_1b: "vom 15. Juli bis und mit dem 15. August;",
+                art145_1c: "vom 18. Dezember bis und mit dem 2. Januar.",
+                art145_2: "Dieser Fristenstillstand gilt nicht für:",
+                art145_2a: "das Schlichtungsverfahren;",
+                art145_2b: "das summarische Verfahren.",
+                art145_3: "Die Parteien sind auf die Ausnahmen nach Absatz 2 hinzuweisen.",
+                art145_4: "Vorbehalten bleiben die Bestimmungen des SchKG über die Betreibungsferien und den Rechtsstillstand.",
+                disclaimer_title: "Rechtlicher Hinweis",
+                disclaimer_subtitle: "Haftungsausschluss und Nutzungsbedingungen",
+                disclaimer_text: "Durchblick Consultancy BV stellt diesen Fristenrechner als unverbindliches Hilfsmittel zur Verfügung. Trotz sorgfältiger Entwicklung und regelmässiger Wartung kann keine Gewähr für die Richtigkeit, Vollständigkeit und Aktualität der Berechnungen und Informationen übernommen werden.",
+                disclaimer_note: "Insbesondere wird darauf hingewiesen:",
+                disclaimer_1: "Die Berechnung dient ausschliesslich der Orientierung und ersetzt keine rechtliche Beratung.",
+                disclaimer_2: "Für die Wahrung von Fristen sind ausschliesslich Sie selbst verantwortlich.",
+                disclaimer_3: "Im Zweifelsfall sollten Sie sich von einer qualifizierten Rechtsanwältin oder einem qualifizierten Rechtsanwalt beraten lassen.",
+                disclaimer_4: "Durchblick Consultancy BV schliesst jegliche Haftung für Schäden aus, die sich aus der Nutzung dieses Fristenrechners ergeben könnten.",
+                disclaimer_accept_text: "Mit der Nutzung des Fristenrechners akzeptieren Sie diese Bedingungen.",
+                disclaimer_accept: "Ich habe den Hinweis gelesen und akzeptiere die Bedingungen",
+                footer_disclaimer: "Dieser Rechner dient nur zur Orientierung. Keine Rechtsberatung.",
+                footer_source: "Source Code auf GitHub",
+                legend_normal: "Normaler Tag",
+                legend_weekend: "Wochenende",
+                legend_holiday: "Feiertag",
+                legend_end: "Fristende",
+                result_delivery: "Zustellung",
+                result_frist: "Gewählte Frist",
+                result_type: "Fristtyp",
+                result_days_total: "Gewählte Frist in Tage",
+                result_court_days: "Gerichtsferien",
+                result_end_without: "Fristende (ohne Friststillstand)",
+                result_end_with: "Fristende (mit Friststillstand)",
+                result_end: "Fristende",
+                day: "Tag",
+                days: "Tage",
+                month: "Monat",
+                months: "Monate",
+                month_starts: "Monatsfrist: Frist beginnt am Tag der Zustellung",
+                day_starts: "Tagesfrist: Frist beginnt am Tag nach der Zustellung",
+                holiday_berchtold: "Berchtoldstag (2. Januar)",
+                holiday_dreikoenige: "Heilige Drei Könige (6. Januar)",
+                holiday_joseph: "Josephstag (19. März)",
+                holiday_karfreitag: "Karfreitag",
+                holiday_ostermontag: "Ostermontag",
+                holiday_arbeit: "Tag der Arbeit (1. Mai)",
+                holiday_pfingsten: "Pfingstmontag",
+                holiday_fronleichnam: "Fronleichnam",
+                holiday_maria_himmelfahrt: "Mariä Himmelfahrt (15. August)",
+                holiday_allerheiligen: "Allerheiligen (1. November)",
+                holiday_maria_empfaengnis: "Maria Empfängnis (8. Dezember)",
+                holiday_stephanstag: "Stephanstag (26. Dezember)"
+            },
+            fr: {
+                title: "Calculateur de délais suisse",
+                step1_title: "Saisir la date de notification",
+                step1_text: "Déterminez la date exacte de notification du document déclenchant le délai. Pour les envois A-Post Plus, veuillez consulter le rapport d'envoi.",
+                step2_title: "Sélectionner le délai",
+                step2_text: "Choisissez le délai approprié (jours ou mois) et indiquez si les féries judiciaires ou des jours fériés spéciaux doivent être pris en compte.",
+                step3_title: "Respecter le délai",
+                step3_text: "Assurez-vous de déposer votre acte à temps. En cas de doute, nous vous recommandons de consulter un avocat.",
+                label_date: "Date de notification de la décision",
+                label_frist: "Type de délai",
+                label_procedure: "Type de procédure (art. 145 al. 2 CPC)",
+                label_court_holidays: "Tenir compte des féries judiciaires (art. 145 CPC)",
+                label_holidays: "Jours fériés à prendre en compte",
+                select_placeholder: "Veuillez sélectionner...",
+                opt_days: "Délais en jours",
+                opt_einsprache: "Délai d'opposition (10 jours)",
+                opt_rekurs: "Délai de recours (20 jours)",
+                opt_beschwerde: "Délai de recours (30 jours)",
+                opt_days_custom: "Délai personnalisé en jours",
+                opt_months: "Délais en mois",
+                opt_month_1: "1 mois",
+                opt_month_3: "3 mois",
+                opt_months_custom: "Délai personnalisé en mois",
+                opt_ordentlich: "Procédure ordinaire",
+                opt_vereinfacht: "Procédure simplifiée",
+                opt_summarisch: "Procédure sommaire (pas de féries judiciaires)",
+                opt_schlichtung: "Procédure de conciliation (pas de féries judiciaires)",
+                procedure_hint: "Les féries judiciaires s'appliquent aux procédures ordinaires et simplifiées",
+                procedure_hint_no: "Les féries judiciaires ne s'appliquent pas à cette procédure (art. 145 al. 2 CPC)",
+                court_holiday_check: "Tenir compte de la suspension des délais pendant les féries judiciaires",
+                national_holidays: "Jours fériés nationaux",
+                all_national: "Tous les jours fériés nationaux",
+                cantonal_holidays: "Jours fériés cantonaux",
+                warning: "Attention : Ce calculateur sert uniquement d'orientation. Vous êtes seul responsable du respect des délais.",
+                calculate: "Calculer le délai",
+                print: "Imprimer le résultat",
+                label_days: "Nombre de jours",
+                label_months: "Nombre de mois",
+                date_hint: "Format : JJ.MM.AAAA",
+                info_calc_title: "Calcul des délais",
+                info_calc_text: "Le délai commence à courir le lendemain de la notification. Si le dernier jour du délai tombe un samedi, un dimanche ou un jour férié reconnu, le délai expire le premier jour ouvrable suivant.",
+                info_important_title: "Remarque importante",
+                info_important_text: "Selon l'arrêt du Tribunal fédéral 5A_691/2023 du 13 août 2024, le délai en mois commence à courir le jour de l'événement déclencheur et non le lendemain.",
+                info_court_title: "Féries judiciaires",
+                info_court_text: "Les féries judiciaires durent :",
+                info_court_easter: "Du 7e jour avant Pâques au 7e jour après Pâques inclus",
+                info_court_summer: "Du 15 juillet au 15 août inclus",
+                info_court_winter: "Du 18 décembre au 2 janvier inclus",
+                info_cantonal_title: "Jours fériés cantonaux",
+                info_cantonal_text: "En plus des jours fériés nationaux, différents jours fériés s'appliquent selon le canton. Ceux-ci sont pris en compte dans le calcul.",
+                law_title: "Bases légales",
+                law_subtitle: "Code de procédure civile suisse (CPC)",
+                art142_title: "Art. 142 Computation",
+                art142_1: "Les délais déclenchés par la communication ou la survenance d'un événement courent dès le lendemain de celles-ci.",
+                art142_2: "Lorsqu'un délai est fixé en mois, il expire le jour du dernier mois correspondant au jour où il a commencé à courir. En l'absence d'une telle date, il expire le dernier jour du mois.",
+                art142_3: "Si le dernier jour est un samedi, un dimanche ou un jour férié reconnu par le droit fédéral ou le droit cantonal du siège du tribunal, le délai expire le premier jour ouvrable qui suit.",
+                art143_title: "Art. 143 Observation des délais",
+                art143_1: "Les actes doivent être remis au plus tard le dernier jour du délai soit au tribunal soit à l'attention de ce dernier, à la poste suisse ou à une représentation diplomatique ou consulaire suisse.",
+                art143_2: "En cas de transmission électronique, le moment déterminant pour l'observation d'un délai est celui où est établi l'accusé de réception qui confirme que la partie a accompli toutes les étapes nécessaires à la transmission.",
+                art143_3: "Un paiement au tribunal est effectué dans le délai prescrit lorsque le montant est versé en faveur du tribunal à la poste suisse ou débité d'un compte bancaire ou postal en Suisse le dernier jour du délai au plus tard.",
+                art144_title: "Art. 144 Prolongation",
+                art144_1: "Les délais légaux ne peuvent pas être prolongés.",
+                art144_2: "Les délais fixés judiciairement peuvent être prolongés pour des motifs suffisants si la demande en est faite avant leur expiration.",
+                art145_title: "Art. 145 Suspension des délais",
+                art145_1: "Les délais légaux et les délais fixés judiciairement ne courent pas :",
+                art145_1a: "du septième jour avant Pâques au septième jour qui suit Pâques inclus ;",
+                art145_1b: "du 15 juillet au 15 août inclus ;",
+                art145_1c: "du 18 décembre au 2 janvier inclus.",
+                art145_2: "La suspension des délais ne s'applique pas :",
+                art145_2a: "à la procédure de conciliation ;",
+                art145_2b: "à la procédure sommaire.",
+                art145_3: "Les parties sont rendues attentives aux exceptions prévues à l'al. 2.",
+                art145_4: "Les dispositions de la LP sur les féries et la suspension des poursuites sont réservées.",
+                disclaimer_title: "Avis juridique",
+                disclaimer_subtitle: "Exclusion de responsabilité et conditions d'utilisation",
+                disclaimer_text: "Durchblick Consultancy BV met ce calculateur de délais à disposition en tant qu'outil indicatif sans engagement. Malgré un développement soigneux et une maintenance régulière, aucune garantie ne peut être donnée quant à l'exactitude, l'exhaustivité et l'actualité des calculs et informations.",
+                disclaimer_note: "Il est notamment rappelé que :",
+                disclaimer_1: "Le calcul sert uniquement d'orientation et ne remplace pas un conseil juridique.",
+                disclaimer_2: "Vous êtes seul responsable du respect des délais.",
+                disclaimer_3: "En cas de doute, vous devriez consulter un avocat qualifié.",
+                disclaimer_4: "Durchblick Consultancy BV décline toute responsabilité pour les dommages pouvant résulter de l'utilisation de ce calculateur.",
+                disclaimer_accept_text: "En utilisant ce calculateur, vous acceptez ces conditions.",
+                disclaimer_accept: "J'ai lu l'avis et j'accepte les conditions",
+                footer_disclaimer: "Ce calculateur sert uniquement d'orientation. Pas de conseil juridique.",
+                footer_source: "Code source sur GitHub",
+                legend_normal: "Jour normal",
+                legend_weekend: "Week-end",
+                legend_holiday: "Jour férié",
+                legend_end: "Fin du délai",
+                result_delivery: "Notification",
+                result_frist: "Délai choisi",
+                result_type: "Type de délai",
+                result_days_total: "Délai choisi en jours",
+                result_court_days: "Féries judiciaires",
+                result_end_without: "Fin du délai (sans suspension)",
+                result_end_with: "Fin du délai (avec suspension)",
+                result_end: "Fin du délai",
+                day: "jour",
+                days: "jours",
+                month: "mois",
+                months: "mois",
+                month_starts: "Délai en mois : commence le jour de la notification",
+                day_starts: "Délai en jours : commence le lendemain de la notification",
+                holiday_berchtold: "Saint-Berchtold (2 janvier)",
+                holiday_dreikoenige: "Épiphanie (6 janvier)",
+                holiday_joseph: "Saint-Joseph (19 mars)",
+                holiday_karfreitag: "Vendredi saint",
+                holiday_ostermontag: "Lundi de Pâques",
+                holiday_arbeit: "Fête du travail (1er mai)",
+                holiday_pfingsten: "Lundi de Pentecôte",
+                holiday_fronleichnam: "Fête-Dieu",
+                holiday_maria_himmelfahrt: "Assomption (15 août)",
+                holiday_allerheiligen: "Toussaint (1er novembre)",
+                holiday_maria_empfaengnis: "Immaculée Conception (8 décembre)",
+                holiday_stephanstag: "Saint-Étienne (26 décembre)"
+            }
+        };
+
+        let currentLang = 'de';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+            document.documentElement.lang = lang;
+            applyTranslations();
+            localStorage.setItem('frist-lang', lang);
+        }
+
+        function t(key) {
+            return translations[currentLang][key] || translations['de'][key] || key;
+        }
+
+        function applyTranslations() {
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (el.tagName === 'INPUT' && el.type !== 'checkbox') {
+                    el.placeholder = t(key);
+                } else {
+                    el.textContent = t(key);
+                }
+            });
+
+            // Update all elements with data-i18n-html attribute (for HTML content)
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                el.innerHTML = t(key);
+            });
+        }
+
+        // Initialize language from localStorage or browser
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('frist-lang');
+            const browserLang = navigator.language.substring(0, 2);
+            const initialLang = savedLang || (browserLang === 'fr' ? 'fr' : 'de');
+            setLanguage(initialLang);
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
