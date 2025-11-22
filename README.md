@@ -47,9 +47,33 @@ Wird während Gerichtsferien zugestellt, beginnt die Frist am ersten Tag nach Fe
 
 ### Feiertage
 
-**National:** Neujahr, Auffahrt, Nationalfeiertag (1. August), Weihnachten
+**Nationale Feiertage** (in der ganzen Schweiz anerkannt):
+- Neujahr (1. Januar)
+- Auffahrt (Christi Himmelfahrt)
+- Bundesfeiertag (1. August)
+- Weihnachten (25. Dezember)
 
-**Kantonal wählbar:** Berchtoldstag, Dreikönige, Josephstag, Karfreitag, Ostermontag, Tag der Arbeit, Pfingstmontag, Fronleichnam, Mariä Himmelfahrt, Allerheiligen, Maria Empfängnis, Stephanstag
+**Kantonale Feiertage** (je nach Kanton):
+- Berchtoldstag (2. Januar)
+- Heilige Drei Könige (6. Januar)
+- Josephstag (19. März)
+- Karfreitag
+- Ostermontag
+- Tag der Arbeit (1. Mai)
+- Pfingstmontag
+- Fronleichnam
+- Mariä Himmelfahrt (15. August)
+- Allerheiligen (1. November)
+- Maria Empfängnis (8. Dezember)
+- Stephanstag (26. Dezember)
+
+### Kantonauswahl
+
+Der Fristenrechner bietet eine Kantonauswahl, die automatisch die im jeweiligen Kanton geltenden Feiertage aktiviert.
+
+**Datenquelle:** Die kantonalen Feiertagsregelungen basieren auf den offiziellen Angaben der Schweizerischen Bundeskanzlei und den kantonalen Gesetzgebungen:
+- [Schweizerische Bundeskanzlei – Feiertage](https://www.bk.admin.ch/bk/de/home/politische-rechte/feiertage.html)
+- [Wikipedia – Feiertage in der Schweiz](https://de.wikipedia.org/wiki/Feiertage_in_der_Schweiz)
 
 ---
 
@@ -96,9 +120,33 @@ Si la notification a lieu pendant les féries, le délai commence le premier jou
 
 ### Jours fériés
 
-**Nationaux :** Nouvel An, Ascension, Fête nationale (1er août), Noël
+**Jours fériés nationaux** (reconnus dans toute la Suisse) :
+- Nouvel An (1er janvier)
+- Ascension
+- Fête nationale (1er août)
+- Noël (25 décembre)
 
-**Cantonaux (sélectionnables) :** Saint-Berchtold, Épiphanie, Saint-Joseph, Vendredi saint, Lundi de Pâques, Fête du travail, Lundi de Pentecôte, Fête-Dieu, Assomption, Toussaint, Immaculée Conception, Saint-Étienne
+**Jours fériés cantonaux** (selon le canton) :
+- Saint-Berchtold (2 janvier)
+- Épiphanie (6 janvier)
+- Saint-Joseph (19 mars)
+- Vendredi saint
+- Lundi de Pâques
+- Fête du travail (1er mai)
+- Lundi de Pentecôte
+- Fête-Dieu
+- Assomption (15 août)
+- Toussaint (1er novembre)
+- Immaculée Conception (8 décembre)
+- Saint-Étienne (26 décembre)
+
+### Sélection du canton
+
+Le calculateur propose une sélection de canton qui active automatiquement les jours fériés en vigueur dans le canton concerné.
+
+**Source des données :** Les réglementations cantonales des jours fériés sont basées sur les informations officielles de la Chancellerie fédérale suisse et les législations cantonales :
+- [Chancellerie fédérale suisse – Jours fériés](https://www.bk.admin.ch/bk/fr/home/droits-politiques/jours-feries.html)
+- [Wikipedia – Jours fériés en Suisse](https://fr.wikipedia.org/wiki/Jours_f%C3%A9ri%C3%A9s_en_Suisse)
 
 ---
 

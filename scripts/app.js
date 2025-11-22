@@ -5,7 +5,9 @@
 let datePicker;
 
 // Kantonale Feiertage - Zuordnung nach Kanton
-// Quelle: Offizielle kantonale Feiertagsregelungen
+// Quellen:
+// - Schweizerische Bundeskanzlei: https://www.bk.admin.ch/bk/de/home/politische-rechte/feiertage.html
+// - Wikipedia: https://de.wikipedia.org/wiki/Feiertage_in_der_Schweiz
 const cantonHolidays = {
     'AG': ['berchtoldstag', 'karfreitag', 'ostermontag', 'pfingstmontag', 'stephanstag'],
     'AI': ['karfreitag', 'ostermontag', 'pfingstmontag', 'fronleichnam', 'maria_himmelfahrt', 'allerheiligen', 'maria_empfaengnis', 'stephanstag'],
