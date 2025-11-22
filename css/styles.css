@@ -84,12 +84,44 @@
         }
 
         input[type="date"],
+        input[type="text"],
         select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 1rem;
+        }
+
+        /* Primary date input - larger and more prominent */
+        #startDate {
+            font-size: 1.25rem;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            background-color: #f0f7fc;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        #startDate:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(19, 117, 188, 0.2);
+            background-color: white;
+        }
+
+        #startDate::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        /* Make the date field label more prominent */
+        label[for="startDate"] {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
         }
 
         .checkbox-group {
@@ -111,11 +143,52 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
 
         button:hover {
-            background-color: var(--secondary-color);
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(19, 117, 188, 0.3);
+        }
+
+        /* Primary submit button - larger and more prominent */
+        #fristForm button[type="submit"] {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Better select styling */
+        select {
+            cursor: pointer;
+            background-color: white;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231375bc' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(19, 117, 188, 0.15);
+        }
+
+        /* Improved form hint text */
+        .form-hint {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
         }
 
         .result {
@@ -1034,6 +1107,25 @@
         .law-header h3 {
             margin: 0;
             font-size: 1.2rem;
+        }
+
+        .law-header h3 a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
+        }
+
+        .law-header h3 a:hover {
+            opacity: 0.85;
+            text-decoration: underline;
+        }
+
+        .law-header h3 a i {
+            font-size: 0.85rem;
+            opacity: 0.8;
         }
 
         .law-content {
