@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de délais suisse - Calcul simple des délais de recours</title>
+    <meta name="description" content="Calculez vos délais de recours selon le Code de procédure civile suisse (CPC). Tient compte des féries judiciaires, week-ends et jours fériés.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-row">
+            <div class="logo-container">
+                <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
+                     alt="Durchblick Consultancy Logo"
+                     class="logo">
+            </div>
+            <div class="language-switcher">
+                <a href="../de/" class="lang-btn">DE</a>
+                <a href="../fr/" class="lang-btn active">FR</a>
+            </div>
+        </div>
+
+        <h1>Calculateur de délais suisse</h1>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-day"></i>
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-content">
+                    <h3>Saisir la date de notification</h3>
+                    <p>Déterminez la date exacte de notification du document déclenchant le délai. Pour les envois A-Post Plus, veuillez consulter le rapport d'envoi.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-clock"></i>
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-content">
+                    <h3>Sélectionner le délai</h3>
+                    <p>Choisissez le délai approprié (jours ou mois) et indiquez si les féries judiciaires ou des jours fériés spéciaux doivent être pris en compte.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-gavel"></i>
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-content">
+                    <h3>Respecter le délai</h3>
+                    <p>Assurez-vous de déposer votre acte à temps. En cas de doute, nous vous recommandons de consulter un avocat.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-card">
+            <form id="fristForm">
+                <div class="form-group">
+                    <label for="startDate" class="required">Date de notification de la décision</label>
+                    <input type="text"
+                           id="startDate"
+                           name="startDate"
+                           required
+                           title="Date de notification de la décision"
+                           aria-describedby="dateHint"
+                           pattern="\d{2}\.\d{2}\.\d{4}">
+                    <small id="dateHint" class="form-hint">Format : JJ.MM.AAAA</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="fristType" class="required">Type de délai</label>
+                    <select id="fristType"
+                            name="fristType"
+                            required
+                            title="Sélectionnez le type de délai"
+                            onchange="toggleCustomFrist()">
+                        <option value="">Veuillez sélectionner...</option>
+                        <optgroup label="Délais en jours">
+                            <option value="days_10">Délai d'opposition (10 jours)</option>
+                            <option value="days_20">Délai de recours (20 jours)</option>
+                            <option value="days_30">Délai de recours (30 jours)</option>
+                            <option value="days_custom">Délai personnalisé en jours</option>
+                        </optgroup>
+                        <optgroup label="Délais en mois">
+                            <option value="months_1">1 mois</option>
+                            <option value="months_3">3 mois</option>
+                            <option value="months_custom">Délai personnalisé en mois</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group" id="customDaysGroup" style="display: none;">
+                    <label for="customDays" class="required">Nombre de jours</label>
+                    <input type="number"
+                           id="customDays"
+                           name="customDays"
+                           min="1"
+                           max="365"
+                           title="Entrez le nombre de jours"
+                           class="form-control">
+                </div>
+
+                <div class="form-group" id="customMonthsGroup" style="display: none;">
+                    <label for="customMonths" class="required">Nombre de mois</label>
+                    <input type="number"
+                           id="customMonths"
+                           name="customMonths"
+                           min="1"
+                           max="12"
+                           title="Entrez le nombre de mois"
+                           class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="verfahrensart">Type de procédure (art. 145 al. 2 CPC)</label>
+                    <select id="verfahrensart" name="verfahrensart" onchange="toggleGerichtsferien()">
+                        <option value="ordentlich">Procédure ordinaire</option>
+                        <option value="vereinfacht">Procédure simplifiée</option>
+                        <option value="summarisch">Procédure sommaire (pas de féries judiciaires)</option>
+                        <option value="schlichtung">Procédure de conciliation (pas de féries judiciaires)</option>
+                    </select>
+                    <small class="form-hint" id="verfahrensartHint">Les féries judiciaires s'appliquent aux procédures ordinaires et simplifiées</small>
+                </div>
+
+                <div class="form-group" id="gerichtsferienGroup">
+                    <label>Tenir compte des féries judiciaires (art. 145 CPC)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="gerichtsferien" checked>
+                            Tenir compte de la suspension des délais pendant les féries judiciaires
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Jours fériés à prendre en compte</label>
+                    <div class="holiday-selection">
+                        <div class="holiday-category">
+                            <h4>Jours fériés nationaux</h4>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="all_national" checked>
+                                    Tous les jours fériés nationaux
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="holiday-category">
+                            <h4>Jours fériés cantonaux</h4>
+                            <div class="checkbox-group holiday-grid">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="berchtoldstag">
+                                    Saint-Berchtold (2 janvier)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="dreikoenige">
+                                    Épiphanie (6 janvier)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="josephstag">
+                                    Saint-Joseph (19 mars)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="karfreitag">
+                                    Vendredi saint
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="ostermontag">
+                                    Lundi de Pâques
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="tag_der_arbeit">
+                                    Fête du travail (1er mai)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="pfingstmontag">
+                                    Lundi de Pentecôte
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="fronleichnam">
+                                    Fête-Dieu
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="maria_himmelfahrt">
+                                    Assomption (15 août)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="allerheiligen">
+                                    Toussaint (1er novembre)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="maria_empfaengnis">
+                                    Immaculée Conception (8 décembre)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="stephanstag">
+                                    Saint-Étienne (26 décembre)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Attention : Ce calculateur sert uniquement d'orientation. Vous êtes seul responsable du respect des délais.
+                </div>
+
+                <button type="submit">Calculer le délai</button>
+            </form>
+
+            <div id="result" class="result">
+                <div class="result-actions">
+                    <button type="button" onclick="printResult()" class="print-button">
+                        <i class="fas fa-print"></i> Imprimer le résultat
+                    </button>
+                </div>
+                <div class="result-summary"></div>
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <div class="timeline-legend">
+                            <span class="legend-item"><span class="dot normal"></span> Jour normal</span>
+                            <span class="legend-item"><span class="dot weekend"></span> Week-end</span>
+                            <span class="legend-item"><span class="dot holiday"></span> Jour férié</span>
+                            <span class="legend-item"><span class="dot last-day"></span> Fin du délai</span>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="weekday-header">Lu</div>
+                        <div class="weekday-header">Ma</div>
+                        <div class="weekday-header">Me</div>
+                        <div class="weekday-header">Je</div>
+                        <div class="weekday-header">Ve</div>
+                        <div class="weekday-header">Sa</div>
+                        <div class="weekday-header">Di</div>
+                    </div>
+                    <div class="timeline"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-cards-container">
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Calcul des délais</h3>
+                    <p>Le délai commence à courir le lendemain de la notification. Si le dernier jour du délai tombe un samedi, un dimanche ou un jour férié reconnu, le délai expire le premier jour ouvrable suivant.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card highlight">
+                <div class="step-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Remarque importante</h3>
+                    <p>Selon l'arrêt du Tribunal fédéral 5A_691/2023 du 13 août 2024, le délai en mois commence à courir le jour de l'événement déclencheur et non le lendemain.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Féries judiciaires</h3>
+                    <p>Les féries judiciaires durent :</p>
+                    <ul>
+                        <li>Du 7e jour avant Pâques au 7e jour après Pâques inclus</li>
+                        <li>Du 15 juillet au 15 août inclus</li>
+                        <li>Du 18 décembre au 2 janvier inclus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Jours fériés cantonaux</h3>
+                    <p>En plus des jours fériés nationaux, différents jours fériés s'appliquent selon le canton. Ceux-ci sont pris en compte dans le calcul.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="law-section">
+            <h2>Bases légales</h2>
+            <p class="law-subtitle">Code de procédure civile suisse (CPC)</p>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 142 Computation</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Les délais déclenchés par la communication ou la survenance d'un événement courent dès le lendemain de celles-ci.</li>
+                        <li>Lorsqu'un délai est fixé en mois, il expire le jour du dernier mois correspondant au jour où il a commencé à courir. En l'absence d'une telle date, il expire le dernier jour du mois.</li>
+                        <li>Si le dernier jour est un samedi, un dimanche ou un jour férié reconnu par le droit fédéral ou le droit cantonal du siège du tribunal, le délai expire le premier jour ouvrable qui suit.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 143 Observation des délais</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Les actes doivent être remis au plus tard le dernier jour du délai soit au tribunal soit à l'attention de ce dernier, à la poste suisse ou à une représentation diplomatique ou consulaire suisse.</li>
+                        <li>En cas de transmission électronique, le moment déterminant pour l'observation d'un délai est celui où est établi l'accusé de réception qui confirme que la partie a accompli toutes les étapes nécessaires à la transmission.</li>
+                        <li>Un paiement au tribunal est effectué dans le délai prescrit lorsque le montant est versé en faveur du tribunal à la poste suisse ou débité d'un compte bancaire ou postal en Suisse le dernier jour du délai au plus tard.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 144 Prolongation</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Les délais légaux ne peuvent pas être prolongés.</li>
+                        <li>Les délais fixés judiciairement peuvent être prolongés pour des motifs suffisants si la demande en est faite avant leur expiration.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 145 Suspension des délais</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Les délais légaux et les délais fixés judiciairement ne courent pas :
+                            <ol type="a">
+                                <li>du septième jour avant Pâques au septième jour qui suit Pâques inclus ;</li>
+                                <li>du 15 juillet au 15 août inclus ;</li>
+                                <li>du 18 décembre au 2 janvier inclus.</li>
+                            </ol>
+                        </li>
+                        <li>La suspension des délais ne s'applique pas :
+                            <ol type="a">
+                                <li>à la procédure de conciliation ;</li>
+                                <li>à la procédure sommaire.</li>
+                            </ol>
+                        </li>
+                        <li>Les parties sont rendues attentives aux exceptions prévues à l'al. 2.</li>
+                        <li>Les dispositions de la LP sur les féries et la suspension des poursuites sont réservées.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>
+                <a href="https://durchblick.nl" target="_blank" rel="noopener">Durchblick Consultancy BV</a>
+                &nbsp;•&nbsp;
+                <a href="https://github.com/chosee/frist" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i> Code source sur GitHub
+                </a>
+            </p>
+            <p class="footer-disclaimer">Ce calculateur sert uniquement d'orientation. Pas de conseil juridique.</p>
+        </div>
+    </footer>
+
+    <div class="print-header" style="display: none;">
+        <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
+             alt="Durchblick Consultancy Logo">
+        <h2>Calcul du délai</h2>
+    </div>
+
+    <div class="print-footer" style="display: none;">
+        <p>Créé avec frist.ch</p>
+        <p>Ce document sert uniquement d'orientation. Vous êtes seul responsable du respect des délais.</p>
+    </div>
+
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <h2>Avis juridique</h2>
+            <div class="disclaimer-text">
+                <p><strong>Exclusion de responsabilité et conditions d'utilisation</strong></p>
+                <p>Durchblick Consultancy BV met ce calculateur de délais à disposition en tant qu'outil indicatif sans engagement. Malgré un développement soigneux et une maintenance régulière, aucune garantie ne peut être donnée quant à l'exactitude, l'exhaustivité et l'actualité des calculs et informations.</p>
+
+                <p>Il est notamment rappelé que :</p>
+                <ul>
+                    <li>Le calcul sert uniquement d'orientation et ne remplace pas un conseil juridique.</li>
+                    <li>Vous êtes seul responsable du respect des délais.</li>
+                    <li>En cas de doute, vous devriez consulter un avocat qualifié.</li>
+                    <li>Durchblick Consultancy BV décline toute responsabilité pour les dommages pouvant résulter de l'utilisation de ce calculateur.</li>
+                </ul>
+
+                <p>En utilisant ce calculateur, vous acceptez ces conditions.</p>
+            </div>
+            <button onclick="acceptDisclaimer()" class="accept-button">
+                J'ai lu l'avis et j'accepte les conditions
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="../scripts/calculations.js"></script>
+    <script src="../scripts/app.js"></script>
+</body>
+</html>

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Schweizer Fristenrechner** - Swiss legal deadline calculator based on the Swiss Civil Procedure Code (ZPO) Articles 142-146.
+**Schweizer Fristenrechner** - Swiss legal deadline calculator based on the Swiss Civil Procedure Code (ZPO/CPC) Articles 142-146.
 
 **Live Site**: https://frist.ch
 
@@ -16,11 +16,41 @@ Hosted via **Cloudflare Pages** with automatic deployment on push to main branch
 - Build output: (none)
 - Build system version: v3
 
+## Project Structure
+
+```
+frist/
+├── index.html          # Language redirect (auto-detects DE/FR)
+├── de/
+│   └── index.html      # German version
+├── fr/
+│   └── index.html      # French version
+├── css/
+│   └── styles.css      # Shared styles (Durchblick brand colors)
+├── scripts/
+│   ├── calculations.js # Core calculation functions
+│   └── app.js          # UI logic and form handling
+├── test.js             # CLI test suite (node test.js)
+└── tests.html          # Browser-based visual tests
+```
+
 ## Tech Stack
 
-- **Frontend**: Vanilla HTML5/CSS3/JavaScript (single-page app)
+- **Frontend**: Vanilla HTML5/CSS3/JavaScript
 - **Styling**: CSS Variables, Font Awesome icons, Flatpickr date picker
+- **Bilingual**: German (DE) and French (FR) versions
+- **Brand**: Durchblick Consultancy BV colors (#1375bc, #bc3c31, #3f6576)
 - **No backend** - all calculation logic runs client-side
+
+## Commands
+
+```bash
+# Run tests
+node test.js
+
+# View visual tests
+open tests.html
+```
 
 ## Legal Calculation Rules
 
@@ -41,21 +71,32 @@ Fristen stehen still während:
 ### Art. 146 ZPO - Zustellung während Gerichtsferien
 Wird während Gerichtsferien zugestellt → Frist beginnt am ersten Tag **nach** Ferienende
 
-## Key Functions in index.html
+## Key Functions
 
-| Funktion | Zweck |
-|----------|-------|
-| `calculateDeadline()` | Hauptberechnung der Frist |
-| `getCourtHolidayPeriodEnd()` | Art. 146: Ferienende ermitteln |
-| `calculateCourtHolidays()` | Art. 145: Gerichtsferientage berechnen |
-| `calculateEasterDate()` | Gaußsche Osterformel |
-| `isWeekendOrHoliday()` | Art. 142 Abs. 3: Wochenende/Feiertag prüfen |
-| `toggleGerichtsferien()` | Art. 145 Abs. 2: Verfahrensart-Ausnahmen |
+### scripts/calculations.js
+
+| Function | Purpose |
+|----------|---------|
+| `calculateDeadline()` | Main deadline calculation |
+| `getCourtHolidayPeriodEnd()` | Art. 146: Find end of court holiday period |
+| `isInCourtHolidays()` | Art. 145: Check if date is in court holidays |
+| `calculateEasterDate()` | Gaussian Easter formula |
+| `isWeekendOrHoliday()` | Art. 142 Abs. 3: Check weekend/holiday |
+| `getHolidaysForYear()` | Get holidays (national + cantonal) for year |
+
+### scripts/app.js
+
+| Function | Purpose |
+|----------|---------|
+| `toggleCustomFrist()` | Show/hide custom day/month inputs |
+| `toggleGerichtsferien()` | Art. 145 Abs. 2: Handle procedure type |
+| `displayResult()` | Render calculation results |
+| `generateCalendar()` | Visual calendar of deadline period |
+| `acceptDisclaimer()` | Handle disclaimer modal |
 
 ## Architecture
 
-Single HTML file (`index.html`) with embedded CSS and JavaScript:
-- All calculation logic in `<script>` tags
-- Form handles user input (date, deadline type, procedure type)
-- Visual calendar display of deadline period
-- Print functionality for documentation
+- **Language detection**: Root `index.html` detects browser language and redirects to `/de/` or `/fr/`
+- **Shared code**: CSS and JS files are shared between language versions
+- **Form handling**: Each language HTML has hardcoded labels, shared JS handles logic
+- **Print support**: CSS print styles for documentation output

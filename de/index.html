@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schweizer Fristenrechner - Rechtsmittelfristen einfach berechnen</title>
+    <meta name="description" content="Berechnen Sie Ihre Rechtsmittelfristen nach Schweizer Zivilprozessordnung (ZPO). Berücksichtigt Gerichtsferien, Wochenenden und Feiertage.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-row">
+            <div class="logo-container">
+                <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
+                     alt="Durchblick Consultancy Logo"
+                     class="logo">
+            </div>
+            <div class="language-switcher">
+                <a href="../de/" class="lang-btn active">DE</a>
+                <a href="../fr/" class="lang-btn">FR</a>
+            </div>
+        </div>
+
+        <h1>Schweizer Fristenrechner</h1>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-day"></i>
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-content">
+                    <h3>Zustellungsdatum erfassen</h3>
+                    <p>Ermitteln Sie das genaue Datum der Zustellung des fristauslösenden Dokuments. Bei A-Post Plus beachten Sie bitte den Sendebericht.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-clock"></i>
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-content">
+                    <h3>Frist auswählen</h3>
+                    <p>Wählen Sie die entsprechende Frist (Tage oder Monate) und geben Sie an, ob Gerichtsferien oder spezielle Feiertage zu berücksichtigen sind.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-gavel"></i>
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-content">
+                    <h3>Frist sichern</h3>
+                    <p>Stellen Sie die rechtzeitige Einreichung sicher. Im Zweifelsfall empfehlen wir, sich von einer Rechtsanwältin oder einem Rechtsanwalt beraten zu lassen.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-card">
+            <form id="fristForm">
+                <div class="form-group">
+                    <label for="startDate" class="required">Zustellungsdatum des Entscheids</label>
+                    <input type="text"
+                           id="startDate"
+                           name="startDate"
+                           required
+                           title="Datum der Zustellung des Entscheids"
+                           aria-describedby="dateHint"
+                           pattern="\d{2}\.\d{2}\.\d{4}">
+                    <small id="dateHint" class="form-hint">Format: TT.MM.JJJJ</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="fristType" class="required">Art der Frist</label>
+                    <select id="fristType"
+                            name="fristType"
+                            required
+                            title="Wählen Sie die Art der Frist"
+                            onchange="toggleCustomFrist()">
+                        <option value="">Bitte wählen...</option>
+                        <optgroup label="Tagesfristen">
+                            <option value="days_10">Einsprachefrist (10 Tage)</option>
+                            <option value="days_20">Rekursfrist (20 Tage)</option>
+                            <option value="days_30">Beschwerdefrist (30 Tage)</option>
+                            <option value="days_custom">Individuelle Tagesfrist</option>
+                        </optgroup>
+                        <optgroup label="Monatsfristen">
+                            <option value="months_1">1 Monat</option>
+                            <option value="months_3">3 Monate</option>
+                            <option value="months_custom">Individuelle Monatsfrist</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group" id="customDaysGroup" style="display: none;">
+                    <label for="customDays" class="required">Anzahl Tage</label>
+                    <input type="number"
+                           id="customDays"
+                           name="customDays"
+                           min="1"
+                           max="365"
+                           title="Geben Sie die Anzahl Tage ein"
+                           class="form-control">
+                </div>
+
+                <div class="form-group" id="customMonthsGroup" style="display: none;">
+                    <label for="customMonths" class="required">Anzahl Monate</label>
+                    <input type="number"
+                           id="customMonths"
+                           name="customMonths"
+                           min="1"
+                           max="12"
+                           title="Geben Sie die Anzahl Monate ein"
+                           class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="verfahrensart">Verfahrensart (Art. 145 Abs. 2 ZPO)</label>
+                    <select id="verfahrensart" name="verfahrensart" onchange="toggleGerichtsferien()">
+                        <option value="ordentlich">Ordentliches Verfahren</option>
+                        <option value="vereinfacht">Vereinfachtes Verfahren</option>
+                        <option value="summarisch">Summarisches Verfahren (keine Gerichtsferien)</option>
+                        <option value="schlichtung">Schlichtungsverfahren (keine Gerichtsferien)</option>
+                    </select>
+                    <small class="form-hint" id="verfahrensartHint">Bei ordentlichen und vereinfachten Verfahren gelten Gerichtsferien</small>
+                </div>
+
+                <div class="form-group" id="gerichtsferienGroup">
+                    <label>Gerichtsferien berücksichtigen (Art. 145 ZPO)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="gerichtsferien" checked>
+                            Fristenstillstand während der Gerichtsferien beachten
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Zu berücksichtigende Feiertage</label>
+                    <div class="holiday-selection">
+                        <div class="holiday-category">
+                            <h4>Nationale Feiertage</h4>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="all_national" checked>
+                                    Alle nationalen Feiertage
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="holiday-category">
+                            <h4>Kantonale Feiertage</h4>
+                            <div class="checkbox-group holiday-grid">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="berchtoldstag">
+                                    Berchtoldstag (2. Januar)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="dreikoenige">
+                                    Heilige Drei Könige (6. Januar)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="josephstag">
+                                    Josephstag (19. März)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="karfreitag">
+                                    Karfreitag
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="ostermontag">
+                                    Ostermontag
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="tag_der_arbeit">
+                                    Tag der Arbeit (1. Mai)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="pfingstmontag">
+                                    Pfingstmontag
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="fronleichnam">
+                                    Fronleichnam
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="maria_himmelfahrt">
+                                    Mariä Himmelfahrt (15. August)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="allerheiligen">
+                                    Allerheiligen (1. November)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="maria_empfaengnis">
+                                    Maria Empfängnis (8. Dezember)
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="holidays" value="stephanstag">
+                                    Stephanstag (26. Dezember)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Bitte beachten Sie: Dieser Rechner dient nur zur Orientierung. Für die Wahrung von Fristen sind Sie selbst verantwortlich.
+                </div>
+
+                <button type="submit">Frist berechnen</button>
+            </form>
+
+            <div id="result" class="result">
+                <div class="result-actions">
+                    <button type="button" onclick="printResult()" class="print-button">
+                        <i class="fas fa-print"></i> Resultat drucken
+                    </button>
+                </div>
+                <div class="result-summary"></div>
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <div class="timeline-legend">
+                            <span class="legend-item"><span class="dot normal"></span> Normaler Tag</span>
+                            <span class="legend-item"><span class="dot weekend"></span> Wochenende</span>
+                            <span class="legend-item"><span class="dot holiday"></span> Feiertag</span>
+                            <span class="legend-item"><span class="dot last-day"></span> Fristende</span>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="weekday-header">Mo</div>
+                        <div class="weekday-header">Di</div>
+                        <div class="weekday-header">Mi</div>
+                        <div class="weekday-header">Do</div>
+                        <div class="weekday-header">Fr</div>
+                        <div class="weekday-header">Sa</div>
+                        <div class="weekday-header">So</div>
+                    </div>
+                    <div class="timeline"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-cards-container">
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Fristberechnung</h3>
+                    <p>Die Frist beginnt am Tag nach der Zustellung zu laufen. Fällt der letzte Tag der Frist auf einen Samstag, Sonntag oder staatlich anerkannten Feiertag, so endet die Frist am nächstfolgenden Werktag.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card highlight">
+                <div class="step-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Wichtiger Hinweis</h3>
+                    <p>Gemäss Urteil des Bundesgerichts 5A_691/2023 vom 13. August 2024 beginnt die Frist nach Monaten am Tag des fristauslösenden Ereignisses und nicht am Folgetag.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Gerichtsferien</h3>
+                    <p>Die Gerichtsferien dauern:</p>
+                    <ul>
+                        <li>7 Tage vor bis und mit 7 Tage nach Ostern</li>
+                        <li>15. Juli bis und mit 15. August</li>
+                        <li>18. Dezember bis und mit 2. Januar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Kantonale Feiertage</h3>
+                    <p>Neben den nationalen Feiertagen gelten je nach Kanton unterschiedliche Feiertage. Diese werden in der Berechnung berücksichtigt.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="law-section">
+            <h2>Gesetzliche Grundlagen</h2>
+            <p class="law-subtitle">Schweizerische Zivilprozessordnung (ZPO)</p>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 142 Beginn und Berechnung</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Fristen, die durch eine Mitteilung oder den Eintritt eines Ereignisses ausgelöst werden, beginnen am folgenden Tag zu laufen.</li>
+                        <li>Berechnet sich eine Frist nach Monaten, so endet sie im letzten Monat an dem Tag, der dieselbe Zahl trägt wie der Tag, an dem die Frist zu laufen begann. Fehlt der entsprechende Tag, so endet die Frist am letzten Tag des Monats.</li>
+                        <li>Fällt der letzte Tag einer Frist auf einen Samstag, einen Sonntag oder einen am Gerichtsort vom Bundesrecht oder vom kantonalen Recht anerkannten Feiertag, so endet sie am nächsten Werktag.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 143 Einhaltung</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Eingaben müssen spätestens am letzten Tag der Frist beim Gericht eingereicht oder zu dessen Handen der Schweizerischen Post oder einer schweizerischen diplomatischen oder konsularischen Vertretung übergeben werden.</li>
+                        <li>Bei elektronischer Einreichung ist für die Wahrung einer Frist der Zeitpunkt massgebend, in dem die Quittung ausgestellt wird, die bestätigt, dass alle Schritte abgeschlossen sind, die auf der Seite der Partei für die Übermittlung notwendig sind.</li>
+                        <li>Die Frist für eine Zahlung an das Gericht ist eingehalten, wenn der Betrag spätestens am letzten Tag der Frist zugunsten des Gerichts der Schweizerischen Post übergeben oder einem Post- oder Bankkonto in der Schweiz belastet worden ist.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 144 Erstreckung</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Gesetzliche Fristen können nicht erstreckt werden.</li>
+                        <li>Gerichtliche Fristen können aus zureichenden Gründen erstreckt werden, wenn das Gericht vor Fristablauf darum ersucht wird.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3>Art. 145 Stillstand der Fristen</h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Gesetzliche und gerichtliche Fristen stehen still:
+                            <ol type="a">
+                                <li>vom siebten Tag vor Ostern bis und mit dem siebten Tag nach Ostern;</li>
+                                <li>vom 15. Juli bis und mit dem 15. August;</li>
+                                <li>vom 18. Dezember bis und mit dem 2. Januar.</li>
+                            </ol>
+                        </li>
+                        <li>Dieser Fristenstillstand gilt nicht für:
+                            <ol type="a">
+                                <li>das Schlichtungsverfahren;</li>
+                                <li>das summarische Verfahren.</li>
+                            </ol>
+                        </li>
+                        <li>Die Parteien sind auf die Ausnahmen nach Absatz 2 hinzuweisen.</li>
+                        <li>Vorbehalten bleiben die Bestimmungen des SchKG über die Betreibungsferien und den Rechtsstillstand.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>
+                <a href="https://durchblick.nl" target="_blank" rel="noopener">Durchblick Consultancy BV</a>
+                &nbsp;•&nbsp;
+                <a href="https://github.com/chosee/frist" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i> Source Code auf GitHub
+                </a>
+            </p>
+            <p class="footer-disclaimer">Dieser Rechner dient nur zur Orientierung. Keine Rechtsberatung.</p>
+        </div>
+    </footer>
+
+    <div class="print-header" style="display: none;">
+        <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
+             alt="Durchblick Consultancy Logo">
+        <h2>Fristberechnung</h2>
+    </div>
+
+    <div class="print-footer" style="display: none;">
+        <p>Erstellt mit frist.ch</p>
+        <p>Dieser Ausdruck dient nur zur Orientierung. Für die Wahrung von Fristen sind Sie selbst verantwortlich.</p>
+    </div>
+
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <h2>Rechtlicher Hinweis</h2>
+            <div class="disclaimer-text">
+                <p><strong>Haftungsausschluss und Nutzungsbedingungen</strong></p>
+                <p>Durchblick Consultancy BV stellt diesen Fristenrechner als unverbindliches Hilfsmittel zur Verfügung. Trotz sorgfältiger Entwicklung und regelmässiger Wartung kann keine Gewähr für die Richtigkeit, Vollständigkeit und Aktualität der Berechnungen und Informationen übernommen werden.</p>
+
+                <p>Insbesondere wird darauf hingewiesen:</p>
+                <ul>
+                    <li>Die Berechnung dient ausschliesslich der Orientierung und ersetzt keine rechtliche Beratung.</li>
+                    <li>Für die Wahrung von Fristen sind ausschliesslich Sie selbst verantwortlich.</li>
+                    <li>Im Zweifelsfall sollten Sie sich von einer qualifizierten Rechtsanwältin oder einem qualifizierten Rechtsanwalt beraten lassen.</li>
+                    <li>Durchblick Consultancy BV schliesst jegliche Haftung für Schäden aus, die sich aus der Nutzung dieses Fristenrechners ergeben könnten.</li>
+                </ul>
+
+                <p>Mit der Nutzung des Fristenrechners akzeptieren Sie diese Bedingungen.</p>
+            </div>
+            <button onclick="acceptDisclaimer()" class="accept-button">
+                Ich habe den Hinweis gelesen und akzeptiere die Bedingungen
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="../scripts/calculations.js"></script>
+    <script src="../scripts/app.js"></script>
+</body>
+</html>

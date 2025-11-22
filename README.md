@@ -104,7 +104,20 @@ Si la notification a lieu pendant les féries, le délai commence le premier jou
 
 ## Technologie | Technologie
 
-- Single-Page-App (HTML/CSS/JavaScript)
+```
+frist/
+├── index.html           # Spracherkennung / Détection de langue
+├── de/index.html        # Deutsche Version
+├── fr/index.html        # Version française
+├── css/styles.css       # Gemeinsame Styles / Styles partagés
+├── scripts/
+│   ├── calculations.js  # Berechnungslogik / Logique de calcul
+│   └── app.js           # UI-Logik / Logique UI
+└── test.js              # Tests (node test.js)
+```
+
+- Vanilla HTML/CSS/JavaScript (kein Framework)
+- Bilingue DE/FR avec détection automatique
 - Aucun backend – calculs côté client
 - Hébergé sur Cloudflare Pages
 - Open Source
