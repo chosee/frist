@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de délais de résiliation suisse</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <meta name="description" content="Calculez les délais de résiliation pour contrats de travail et de bail selon le droit suisse. CO art. 335, CO art. 266.">
+    <meta name="keywords" content="délai de résiliation, calculateur résiliation, contrat de travail, bail, CO art. 335, CO art. 266, Suisse">
+    <meta name="author" content="Durchblick Consultancy BV">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://frist.ch/fr/kuendigung.html">
+    <meta property="og:title" content="Calculateur de délais de résiliation suisse">
+    <meta property="og:description" content="Calculez les délais de résiliation pour contrats de travail et de bail selon le droit suisse.">
+    <meta property="og:image" content="https://frist.ch/images/og-frist-fr.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="fr_CH">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Calculateur de délais de résiliation suisse">
+    <meta name="twitter:description" content="Calculez les délais de résiliation pour contrats de travail et de bail selon le droit suisse.">
+    <meta name="twitter:image" content="https://frist.ch/images/og-frist-fr.png">
+
+    <!-- Canonical & Language -->
+    <link rel="canonical" href="https://frist.ch/fr/kuendigung.html">
+    <link rel="alternate" hreflang="de" href="https://frist.ch/de/kuendigung.html">
+    <link rel="alternate" hreflang="fr" href="https://frist.ch/fr/kuendigung.html">
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Calculateur de délais de résiliation suisse",
+        "description": "Calculez les délais de résiliation pour contrats de travail et de bail selon le droit suisse",
+        "url": "https://frist.ch/fr/kuendigung.html",
+        "applicationCategory": "LegalService",
+        "operatingSystem": "Web",
+        "inLanguage": "fr-CH",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CHF"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Durchblick Consultancy BV",
+            "url": "https://durchblick.nl"
+        }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Economica:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .tool-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tool-nav a {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #3f606f;
+            font-family: 'Economica', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .tool-nav a:hover {
+            background: #e0e0e0;
+        }
+        .tool-nav a.active {
+            background: #3f606f;
+            color: white;
+        }
+        .contract-type-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #3f606f;
+        }
+        .contract-type-info h4 {
+            margin: 0 0 8px 0;
+            color: #3f606f;
+        }
+        .contract-type-info p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .timeline-visual {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .timeline-bar {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .timeline-point {
+            text-align: center;
+            flex: 0 0 auto;
+        }
+        .timeline-point .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3f606f;
+            margin: 0 auto 5px;
+        }
+        .timeline-point .dot.end {
+            background: #cc5c53;
+        }
+        .timeline-line {
+            flex: 1;
+            height: 3px;
+            background: linear-gradient(to right, #3f606f, #cc5c53);
+            margin: 0 10px;
+        }
+        .timeline-point small {
+            font-size: 0.75rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-row">
+            <div class="language-switcher">
+                <a href="../de/kuendigung.html" class="lang-btn">DE</a>
+                <a href="../fr/kuendigung.html" class="lang-btn active">FR</a>
+            </div>
+        </div>
+
+        <h1><img src="../favicon.svg" alt="" class="title-icon">Calculateur délais de résiliation</h1>
+
+        <nav class="tool-nav">
+            <a href="../fr/">Calculateur de délais</a>
+            <a href="../fr/verjaehrung.html">Calculateur prescription</a>
+            <a href="../fr/kuendigung.html" class="active">Délais de résiliation</a>
+        </nav>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-file-signature"></i>
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-content">
+                    <h3>Choisir le type de contrat</h3>
+                    <p>Sélectionnez le type de contrat: contrat de travail, bail ou autre contrat.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-content">
+                    <h3>Saisir la date de résiliation</h3>
+                    <p>Entrez la date à laquelle la résiliation est notifiée.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-door-open"></i>
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-content">
+                    <h3>Date de fin au plus tôt</h3>
+                    <p>Découvrez à quelle date le contrat peut prendre fin au plus tôt.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-card">
+            <form id="kuendigungForm">
+                <div class="form-group">
+                    <label for="contractType" class="required">Type de contrat
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-content">Différents délais et termes de résiliation s'appliquent selon le type de contrat.</span>
+                        </span>
+                    </label>
+                    <select id="contractType" name="contractType" required onchange="updateContractInfo()">
+                        <option value="">Veuillez choisir...</option>
+                        <optgroup label="Contrat de travail (CO art. 335)">
+                            <option value="work_probation">Temps d'essai (7 jours)</option>
+                            <option value="work_year1">1ère année de service (1 mois)</option>
+                            <option value="work_year2_9">2e-9e année de service (2 mois)</option>
+                            <option value="work_year10">Dès la 10e année (3 mois)</option>
+                        </optgroup>
+                        <optgroup label="Bail (CO art. 266)">
+                            <option value="rent_apartment">Logement (3 mois pour fin de trimestre)</option>
+                            <option value="rent_business">Locaux commerciaux (6 mois pour fin de trimestre)</option>
+                            <option value="rent_room">Chambre meublée (2 semaines pour fin de mois)</option>
+                            <option value="rent_parking">Place de parc (2 semaines pour fin de mois)</option>
+                        </optgroup>
+                        <optgroup label="Autres contrats">
+                            <option value="custom">Délai individuel</option>
+                        </optgroup>
+                    </select>
+                    <div id="contractTypeInfo" class="contract-type-info" style="display: none;"></div>
+                </div>
+
+                <div class="form-group" id="customPeriodGroup" style="display: none;">
+                    <label for="customMonths" class="required">Délai de résiliation (mois)</label>
+                    <input type="number" id="customMonths" name="customMonths" min="1" max="24" placeholder="p.ex. 3">
+                </div>
+
+                <div class="form-group" id="customTermGroup" style="display: none;">
+                    <label for="customTerm">Terme de résiliation</label>
+                    <select id="customTerm" name="customTerm">
+                        <option value="any">N'importe quand (sans terme spécifique)</option>
+                        <option value="month_end">Pour fin de mois</option>
+                        <option value="quarter_end">Pour fin de trimestre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="noticeDate" class="required">Date de la résiliation (notification)
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-content">La date à laquelle la résiliation parvient au destinataire. Pour lettres recommandées: date de réception ou fin du délai de garde.</span>
+                        </span>
+                    </label>
+                    <input type="text"
+                           id="noticeDate"
+                           name="noticeDate"
+                           required
+                           title="Date de résiliation"
+                           pattern="\d{2}\.\d{2}\.\d{4}">
+                    <small class="form-hint">Format: JJ.MM.AAAA</small>
+                </div>
+
+                <div class="warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Attention: Ce sont des délais légaux minimaux. Des délais plus longs peuvent être convenus contractuellement. Vérifiez votre contrat!
+                </div>
+
+                <button type="submit">Calculer le terme de résiliation</button>
+            </form>
+
+            <div id="result" class="result" style="display: none;">
+                <div class="result-actions">
+                    <button type="button" onclick="printResult()" class="print-button">
+                        <i class="fas fa-print"></i> Imprimer le résultat
+                    </button>
+                </div>
+                <div class="result-summary"></div>
+            </div>
+        </div>
+
+        <div class="info-cards-container">
+            <div class="info-step-card highlight">
+                <div class="step-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Contrat de travail (CO art. 335)</h3>
+                    <p>Délais de résiliation légaux:</p>
+                    <ul>
+                        <li><strong>Temps d'essai:</strong> 7 jours (n'importe quand)</li>
+                        <li><strong>1ère année:</strong> 1 mois pour fin de mois</li>
+                        <li><strong>2e-9e année:</strong> 2 mois pour fin de mois</li>
+                        <li><strong>Dès la 10e année:</strong> 3 mois pour fin de mois</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;"><small>Des délais plus longs peuvent être convenus contractuellement.</small></p>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Bail de logement (CO art. 266c)</h3>
+                    <p>Délai de résiliation: <strong>3 mois</strong></p>
+                    <p>Terme: <strong>Terme usuel local</strong> (généralement fin de trimestre: 31.3., 30.6., 30.9., 31.12.)</p>
+                    <p style="margin-top: 0.5rem;">Dans de nombreux cantons, également pour fin de mois. Vérifiez votre bail!</p>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Locaux commerciaux (CO art. 266d)</h3>
+                    <p>Délai de résiliation: <strong>6 mois</strong></p>
+                    <p>Terme: <strong>Terme usuel local</strong> (généralement fin de trimestre)</p>
+                    <p style="margin-top: 0.5rem;">Pour les baux commerciaux, des délais contractuels plus longs sont courants.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Remarques importantes</h3>
+                    <p><strong>Réception de la résiliation:</strong> La résiliation doit parvenir au destinataire avant le début du délai. Pour recommandé: au plus tard le dernier jour du délai de garde.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Exigences de forme:</strong> La résiliation de bail d'habitation doit être faite sur formule officielle. La résiliation de contrat de travail n'est soumise à aucune forme.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="law-section">
+            <h2>Bases légales</h2>
+            <p class="law-subtitle">Code des obligations suisse (CO)</p>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3><a href="https://www.fedlex.admin.ch/eli/cc/27/317_321_377/fr#art_335_c" target="_blank" rel="noopener">Art. 335c CO – Délais de congé contrat de travail <i class="fas fa-external-link-alt"></i></a></h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>Le contrat peut être résilié pour la fin d'un mois moyennant un délai de congé d'un mois pendant la première année de service, de deux mois de la deuxième à la neuvième année de service, de trois mois ultérieurement.</li>
+                        <li>Ces délais peuvent être modifiés par accord écrit, contrat-type de travail ou convention collective; des délais inférieurs à un mois ne peuvent toutefois être fixés que par convention collective et pour la première année de service.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3><a href="https://www.fedlex.admin.ch/eli/cc/27/317_321_377/fr#art_266_c" target="_blank" rel="noopener">Art. 266c CO – Résiliation bail de logement <i class="fas fa-external-link-alt"></i></a></h3>
+                </div>
+                <div class="law-content">
+                    <p>Lorsque le bail porte sur un logement, chacune des parties peut le résilier en observant un délai de congé de trois mois pour le terme fixé par l'usage local ou, à défaut d'un tel usage, pour la fin d'un trimestre de bail.</p>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3><a href="https://www.fedlex.admin.ch/eli/cc/27/317_321_377/fr#art_266_d" target="_blank" rel="noopener">Art. 266d CO – Résiliation locaux commerciaux <i class="fas fa-external-link-alt"></i></a></h3>
+                </div>
+                <div class="law-content">
+                    <p>Lorsque le bail porte sur des locaux commerciaux, chacune des parties peut le résilier en observant un délai de congé de six mois pour le terme fixé par l'usage local ou, à défaut d'un tel usage, pour la fin d'un trimestre de bail.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>
+                <a href="https://durchblick.nl/tools_fr.html" target="_blank" rel="noopener">Durchblick Consultancy BV</a>
+                &nbsp;•&nbsp;
+                <a href="https://github.com/durchblick-nl/frist" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i> Code source sur GitHub
+                </a>
+            </p>
+            <p class="footer-disclaimer">Ce calculateur sert uniquement à titre indicatif. Pas de conseil juridique.</p>
+        </div>
+    </footer>
+
+    <div class="print-header" style="display: none;">
+        <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
+             alt="Durchblick Consultancy Logo">
+        <div>
+            <h2>Calcul du délai de résiliation</h2>
+            <p id="printDate" style="font-size: 0.9rem; color: #666; margin-top: 0.25rem;"></p>
+        </div>
+    </div>
+
+    <div class="print-footer" style="display: none;">
+        <p><strong>frist.ch</strong> – Calculateur de délais de résiliation selon le Code des obligations suisse</p>
+        <p>Ce document sert uniquement à titre indicatif. Pas de conseil juridique.</p>
+    </div>
+
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <h2>Avis juridique</h2>
+            <div class="disclaimer-text">
+                <p><strong>Exclusion de responsabilité et conditions d'utilisation</strong></p>
+                <p>Durchblick Consultancy BV met ce calculateur à disposition en tant qu'outil indicatif sans engagement. Malgré un développement soigneux, aucune garantie ne peut être donnée quant à l'exactitude des calculs.</p>
+
+                <p>Il est notamment précisé:</p>
+                <ul>
+                    <li>Le calculateur indique uniquement les délais légaux minimaux. Des dérogations contractuelles sont possibles.</li>
+                    <li>Vérifiez toujours votre contrat pour des dispositions particulières.</li>
+                    <li>Durchblick Consultancy BV décline toute responsabilité pour les dommages résultant de l'utilisation.</li>
+                </ul>
+
+                <p>En utilisant ce service, vous acceptez ces conditions.</p>
+            </div>
+            <button onclick="acceptDisclaimer()" class="accept-button">
+                J'ai lu l'avis et j'accepte les conditions
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const contractTypes = {
+            'work_probation': {
+                name: 'Temps d\'essai',
+                article: 'CO art. 335b',
+                days: 7,
+                term: 'any',
+                info: 'Pendant le temps d\'essai (max. 3 mois), le contrat peut être résilié moyennant un délai de 7 jours.'
+            },
+            'work_year1': {
+                name: '1ère année de service',
+                article: 'CO art. 335c',
+                months: 1,
+                term: 'month_end',
+                info: 'Pendant la première année, le délai de résiliation est d\'un mois pour la fin d\'un mois.'
+            },
+            'work_year2_9': {
+                name: '2e-9e année de service',
+                article: 'CO art. 335c',
+                months: 2,
+                term: 'month_end',
+                info: 'De la 2e à la 9e année, le délai est de 2 mois pour la fin d\'un mois.'
+            },
+            'work_year10': {
+                name: 'Dès la 10e année',
+                article: 'CO art. 335c',
+                months: 3,
+                term: 'month_end',
+                info: 'Dès la 10e année de service, le délai est de 3 mois pour la fin d\'un mois.'
+            },
+            'rent_apartment': {
+                name: 'Logement',
+                article: 'CO art. 266c',
+                months: 3,
+                term: 'quarter_end',
+                info: 'Bail de logement: délai de 3 mois pour le terme usuel local (généralement fin de trimestre).'
+            },
+            'rent_business': {
+                name: 'Locaux commerciaux',
+                article: 'CO art. 266d',
+                months: 6,
+                term: 'quarter_end',
+                info: 'Bail commercial: délai de 6 mois pour le terme usuel local (généralement fin de trimestre).'
+            },
+            'rent_room': {
+                name: 'Chambre meublée',
+                article: 'CO art. 266e',
+                weeks: 2,
+                term: 'month_end',
+                info: 'Chambres meublées: délai de 2 semaines pour la fin d\'un mois.'
+            },
+            'rent_parking': {
+                name: 'Place de parc',
+                article: 'CO art. 266e',
+                weeks: 2,
+                term: 'month_end',
+                info: 'Places de parc: délai de 2 semaines pour la fin d\'un mois.'
+            },
+            'custom': {
+                name: 'Délai individuel',
+                article: 'Contrat',
+                custom: true,
+                info: 'Entrez le délai de résiliation convenu contractuellement.'
+            }
+        };
+
+        function updateContractInfo() {
+            const select = document.getElementById('contractType');
+            const infoDiv = document.getElementById('contractTypeInfo');
+            const customPeriodGroup = document.getElementById('customPeriodGroup');
+            const customTermGroup = document.getElementById('customTermGroup');
+            const type = contractTypes[select.value];
+
+            if (type) {
+                let periodText = '';
+                if (type.days) periodText = `${type.days} jours`;
+                else if (type.weeks) periodText = `${type.weeks} semaines`;
+                else if (type.months) periodText = `${type.months} mois`;
+                else if (type.custom) periodText = 'Individuel';
+
+                let termText = '';
+                if (type.term === 'any') termText = 'n\'importe quand';
+                else if (type.term === 'month_end') termText = 'pour fin de mois';
+                else if (type.term === 'quarter_end') termText = 'pour fin de trimestre';
+
+                infoDiv.innerHTML = `
+                    <h4>${type.name} – ${type.article}</h4>
+                    <p><strong>Délai de résiliation:</strong> ${periodText} ${termText}</p>
+                    <p>${type.info}</p>
+                `;
+                infoDiv.style.display = 'block';
+
+                customPeriodGroup.style.display = type.custom ? 'block' : 'none';
+                customTermGroup.style.display = type.custom ? 'block' : 'none';
+            } else {
+                infoDiv.style.display = 'none';
+                customPeriodGroup.style.display = 'none';
+                customTermGroup.style.display = 'none';
+            }
+        }
+
+        function parseDate(dateStr) {
+            const parts = dateStr.split('.');
+            if (parts.length !== 3) return null;
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('fr-CH', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function formatDateShort(date) {
+            return date.toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function addDays(date, days) {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+
+        function addWeeks(date, weeks) {
+            return addDays(date, weeks * 7);
+        }
+
+        function addMonths(date, months) {
+            const result = new Date(date);
+            result.setMonth(result.getMonth() + months);
+            return result;
+        }
+
+        function getMonthEnd(date) {
+            const result = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            return result;
+        }
+
+        function getNextQuarterEnd(date) {
+            const month = date.getMonth();
+            let targetMonth;
+            if (month < 2) targetMonth = 2;
+            else if (month < 5) targetMonth = 5;
+            else if (month < 8) targetMonth = 8;
+            else if (month < 11) targetMonth = 11;
+            else targetMonth = 14;
+
+            let year = date.getFullYear();
+            if (targetMonth > 11) {
+                targetMonth -= 12;
+                year++;
+            }
+
+            return new Date(year, targetMonth + 1, 0);
+        }
+
+        function getTerminationDate(noticeDate, type, customMonths, customTerm) {
+            let minEndDate;
+
+            if (type.custom) {
+                minEndDate = addMonths(noticeDate, parseInt(customMonths) || 1);
+            } else if (type.days) {
+                minEndDate = addDays(noticeDate, type.days);
+            } else if (type.weeks) {
+                minEndDate = addWeeks(noticeDate, type.weeks);
+            } else if (type.months) {
+                minEndDate = addMonths(noticeDate, type.months);
+            }
+
+            let term = type.custom ? customTerm : type.term;
+
+            if (term === 'month_end') {
+                let endDate = getMonthEnd(minEndDate);
+                if (endDate < minEndDate) {
+                    endDate = getMonthEnd(addMonths(minEndDate, 1));
+                }
+                return endDate;
+            } else if (term === 'quarter_end') {
+                let endDate = getNextQuarterEnd(minEndDate);
+                while (endDate < minEndDate) {
+                    endDate = getNextQuarterEnd(addMonths(endDate, 1));
+                }
+                return endDate;
+            } else {
+                return minEndDate;
+            }
+        }
+
+        document.getElementById('kuendigungForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const contractTypeValue = document.getElementById('contractType').value;
+            const noticeDateStr = document.getElementById('noticeDate').value;
+            const customMonths = document.getElementById('customMonths').value;
+            const customTerm = document.getElementById('customTerm').value;
+
+            if (!contractTypeValue || !noticeDateStr) {
+                alert('Veuillez remplir tous les champs obligatoires.');
+                return;
+            }
+
+            const type = contractTypes[contractTypeValue];
+            const noticeDate = parseDate(noticeDateStr);
+
+            if (!noticeDate) {
+                alert('Veuillez entrer une date valide.');
+                return;
+            }
+
+            const terminationDate = getTerminationDate(noticeDate, type, customMonths, customTerm);
+
+            let periodDesc = '';
+            if (type.custom) {
+                periodDesc = `${customMonths} mois`;
+            } else if (type.days) {
+                periodDesc = `${type.days} jours`;
+            } else if (type.weeks) {
+                periodDesc = `${type.weeks} semaines`;
+            } else if (type.months) {
+                periodDesc = `${type.months} mois`;
+            }
+
+            let termDesc = '';
+            let term = type.custom ? customTerm : type.term;
+            if (term === 'month_end') termDesc = 'pour fin de mois';
+            else if (term === 'quarter_end') termDesc = 'pour fin de trimestre';
+            else termDesc = 'n\'importe quand';
+
+            let resultHTML = `
+                <h3>Résultat</h3>
+                <table class="result-table">
+                    <tr>
+                        <td>Type de contrat:</td>
+                        <td><strong>${type.name}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Base légale:</td>
+                        <td>${type.article}</td>
+                    </tr>
+                    <tr>
+                        <td>Délai de résiliation:</td>
+                        <td>${periodDesc} ${termDesc}</td>
+                    </tr>
+                    <tr>
+                        <td>Résiliation notifiée le:</td>
+                        <td>${formatDateShort(noticeDate)}</td>
+                    </tr>
+                    <tr class="result-total">
+                        <td><strong>Fin au plus tôt:</strong></td>
+                        <td><strong>${formatDate(terminationDate)}</strong></td>
+                    </tr>
+                </table>
+
+                <div class="timeline-visual">
+                    <h4 style="margin: 0 0 10px 0; color: #3f606f;">Chronologie</h4>
+                    <div class="timeline-bar">
+                        <div class="timeline-point">
+                            <div class="dot"></div>
+                            <small>Résiliation<br>${formatDateShort(noticeDate)}</small>
+                        </div>
+                        <div class="timeline-line"></div>
+                        <div class="timeline-point">
+                            <div class="dot end"></div>
+                            <small>Fin<br>${formatDateShort(terminationDate)}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (contractTypeValue.startsWith('rent_')) {
+                resultHTML += `
+                    <div class="warning" style="margin-top: 20px;">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Remarque:</strong> La résiliation de bail d'habitation doit être faite sur formule officielle. Elle doit parvenir au destinataire au plus tard le dernier jour avant le début du délai.
+                    </div>
+                `;
+            }
+
+            document.querySelector('.result-summary').innerHTML = resultHTML;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#noticeDate", { dateFormat: "d.m.Y", allowInput: true, defaultDate: "today" });
+        });
+
+        function printResult() {
+            document.getElementById('printDate').textContent = 'Créé le: ' + new Date().toLocaleDateString('fr-CH');
+            window.print();
+        }
+
+        function acceptDisclaimer() {
+            document.getElementById('disclaimerModal').style.display = 'none';
+            localStorage.setItem('kuendigung_disclaimer_accepted', 'true');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('kuendigung_disclaimer_accepted')) {
+                document.getElementById('disclaimerModal').style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

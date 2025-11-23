@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de prescription suisse - Calculer les délais de prescription</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <meta name="description" content="Calculez les délais de prescription selon le Code des obligations suisse. Pour créances, dommages-intérêts, contrats de vente et plus.">
+    <meta name="keywords" content="calculateur prescription, délai de prescription, CO art. 127, CO art. 128, Suisse, prescription, créance, dommages-intérêts">
+    <meta name="author" content="Durchblick Consultancy BV">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://frist.ch/fr/verjaehrung.html">
+    <meta property="og:title" content="Calculateur de prescription suisse - Calculer les délais">
+    <meta property="og:description" content="Calculez les délais de prescription selon le Code des obligations suisse. Pour créances, dommages-intérêts et plus.">
+    <meta property="og:image" content="https://frist.ch/images/og-frist-fr.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="fr_CH">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Calculateur de prescription suisse - Calculer les délais">
+    <meta name="twitter:description" content="Calculez les délais de prescription selon le Code des obligations suisse. Pour créances, dommages-intérêts et plus.">
+    <meta name="twitter:image" content="https://frist.ch/images/og-frist-fr.png">
+
+    <!-- Canonical & Language -->
+    <link rel="canonical" href="https://frist.ch/fr/verjaehrung.html">
+    <link rel="alternate" hreflang="de" href="https://frist.ch/de/verjaehrung.html">
+    <link rel="alternate" hreflang="fr" href="https://frist.ch/fr/verjaehrung.html">
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Calculateur de prescription suisse",
+        "description": "Calculez les délais de prescription selon le Code des obligations suisse",
+        "url": "https://frist.ch/fr/verjaehrung.html",
+        "applicationCategory": "LegalService",
+        "operatingSystem": "Web",
+        "inLanguage": "fr-CH",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CHF"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Durchblick Consultancy BV",
+            "url": "https://durchblick.nl"
+        }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Economica:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .tool-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tool-nav a {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #3f606f;
+            font-family: 'Economica', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .tool-nav a:hover {
+            background: #e0e0e0;
+        }
+        .tool-nav a.active {
+            background: #3f606f;
+            color: white;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        .status-ok {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-expired {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        .countdown {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3f606f;
+            margin: 15px 0;
+        }
+        .claim-type-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #3f606f;
+        }
+        .claim-type-info h4 {
+            margin: 0 0 8px 0;
+            color: #3f606f;
+        }
+        .claim-type-info p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-row">
+            <div class="language-switcher">
+                <a href="../de/verjaehrung.html" class="lang-btn">DE</a>
+                <a href="../fr/verjaehrung.html" class="lang-btn active">FR</a>
+            </div>
+        </div>
+
+        <h1><img src="../favicon.svg" alt="" class="title-icon">Calculateur de prescription suisse</h1>
+
+        <nav class="tool-nav">
+            <a href="../fr/">Calculateur de délais</a>
+            <a href="../fr/verjaehrung.html" class="active">Calculateur de prescription</a>
+        </nav>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-file-contract"></i>
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-content">
+                    <h3>Choisir le type de créance</h3>
+                    <p>Sélectionnez le type de créance. Différents délais de prescription s'appliquent selon le type.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-calendar-day"></i>
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-content">
+                    <h3>Saisir le début du délai</h3>
+                    <p>Entrez la date à laquelle la prescription a commencé à courir (p.ex. exigibilité, connaissance du dommage).</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-hourglass-half"></i>
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-content">
+                    <h3>Vérifier la prescription</h3>
+                    <p>Découvrez jusqu'à quand la créance peut être invoquée et comment interrompre la prescription.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-card">
+            <form id="verjaehrungForm">
+                <div class="form-group">
+                    <label for="claimType" class="required">Type de créance
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-content">Différents délais de prescription s'appliquent selon le type de créance en droit suisse.</span>
+                        </span>
+                    </label>
+                    <select id="claimType" name="claimType" required onchange="updateClaimInfo()">
+                        <option value="">Veuillez choisir...</option>
+                        <optgroup label="10 ans (CO art. 127)">
+                            <option value="general_10">Créances générales (p.ex. prêt, prix d'achat)</option>
+                            <option value="contract_10">Créances contractuelles (général)</option>
+                            <option value="judgment_10">Jugements et transactions judiciaires</option>
+                        </optgroup>
+                        <optgroup label="5 ans (CO art. 128)">
+                            <option value="rent_5">Loyers et fermages</option>
+                            <option value="salary_5">Salaires</option>
+                            <option value="interest_5">Intérêts et rentes</option>
+                            <option value="alimony_5">Contributions d'entretien</option>
+                            <option value="board_5">Pension, hébergement</option>
+                            <option value="craft_5">Travaux d'artisans</option>
+                            <option value="retail_5">Commerce de détail</option>
+                            <option value="medical_5">Honoraires de médecins et avocats</option>
+                            <option value="building_5">Défauts d'ouvrages immobiliers (CO art. 371)</option>
+                        </optgroup>
+                        <optgroup label="3 ans (CO art. 60/67)">
+                            <option value="tort_3">Dommages-intérêts (acte illicite)</option>
+                            <option value="enrichment_3">Enrichissement illégitime</option>
+                            <option value="injury_3">Lésions corporelles (depuis 1.1.2020)</option>
+                        </optgroup>
+                        <optgroup label="2 ans (CO art. 210/371)">
+                            <option value="sale_2">Contrat de vente: défauts de la chose</option>
+                            <option value="work_defect_2">Contrat d'entreprise: défauts (ouvrages mobiliers)</option>
+                        </optgroup>
+                        <optgroup label="1 an">
+                            <option value="transport_1">Dommages de transport (CO art. 454)</option>
+                        </optgroup>
+                        <optgroup label="Cas spéciaux">
+                            <option value="loss_certificate_20">Actes de défaut de biens (20 ans)</option>
+                            <option value="culture_30">Biens culturels (1 + 30 ans)</option>
+                            <option value="regress_3">Recours solidarité (3 ans)</option>
+                            <option value="insurance_5">Créances d'assurance (5 ans, depuis 2022)</option>
+                        </optgroup>
+                    </select>
+                    <div id="claimTypeInfo" class="claim-type-info" style="display: none;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="startDate" class="required">Début de la prescription
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-content">La date à laquelle le délai a commencé. Pour les créances: exigibilité. Pour les dommages-intérêts: connaissance du dommage et du responsable.</span>
+                        </span>
+                    </label>
+                    <input type="text"
+                           id="startDate"
+                           name="startDate"
+                           required
+                           title="Début de la prescription"
+                           pattern="\d{2}\.\d{2}\.\d{4}">
+                    <small class="form-hint">Format: JJ.MM.AAAA</small>
+                </div>
+
+                <div class="form-group" id="absoluteDateGroup" style="display: none;">
+                    <label for="absoluteDate">Date de l'événement dommageable (délai absolu)
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-content">En plus du délai relatif (dès la connaissance), un délai absolu s'applique dès l'événement dommageable.</span>
+                        </span>
+                    </label>
+                    <input type="text"
+                           id="absoluteDate"
+                           name="absoluteDate"
+                           title="Date de l'événement"
+                           pattern="\d{2}\.\d{2}\.\d{4}">
+                    <small class="form-hint">Format: JJ.MM.AAAA (optionnel, pour prescription absolue)</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Interruption de la prescription (CO art. 135)
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-content">La prescription a-t-elle été interrompue? Après une interruption, un nouveau délai commence à courir.</span>
+                        </span>
+                    </label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="interrupted" onchange="toggleInterruptionDate()">
+                            La prescription a été interrompue
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="interruptionDateGroup" style="display: none;">
+                    <label for="interruptionDate" class="required">Date de l'interruption
+                        <span class="info-tooltip">
+                            <span class="info-icon">?</span>
+                            <span class="tooltip-content">Causes d'interruption: reconnaissance de dette, poursuite, action en justice, requête de conciliation. Un nouveau délai commence dès cette date.</span>
+                        </span>
+                    </label>
+                    <input type="text"
+                           id="interruptionDate"
+                           name="interruptionDate"
+                           title="Date de l'interruption"
+                           pattern="\d{2}\.\d{2}\.\d{4}">
+                    <small class="form-hint">Format: JJ.MM.AAAA</small>
+                </div>
+
+                <div class="warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Attention: Ce calculateur sert uniquement à titre indicatif. Le calcul de la prescription peut être complexe. En cas de doute, consultez un avocat.
+                </div>
+
+                <button type="submit">Calculer la prescription</button>
+            </form>
+
+            <div id="result" class="result" style="display: none;">
+                <div class="result-actions">
+                    <button type="button" onclick="printResult()" class="print-button">
+                        <i class="fas fa-print"></i> Imprimer le résultat
+                    </button>
+                </div>
+                <div class="result-summary"></div>
+            </div>
+        </div>
+
+        <div class="info-cards-container">
+            <div class="info-step-card highlight">
+                <div class="step-icon">
+                    <i class="fas fa-hourglass-end"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Délais de prescription en aperçu</h3>
+                    <ul>
+                        <li><strong>10 ans:</strong> Créances générales (CO art. 127)</li>
+                        <li><strong>5 ans:</strong> Prestations périodiques comme loyer, salaire (CO art. 128)</li>
+                        <li><strong>3 ans:</strong> Dommages-intérêts, enrichissement illégitime (CO art. 60/67)</li>
+                        <li><strong>2 ans:</strong> Garantie pour défauts à l'achat (CO art. 210)</li>
+                        <li><strong>1 an:</strong> Dommages de transport, assurances</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-redo"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Interruption de la prescription</h3>
+                    <p>La prescription est interrompue par (CO art. 135):</p>
+                    <ul>
+                        <li>Reconnaissance de dette (y c. paiement d'intérêts ou acomptes)</li>
+                        <li>Poursuite ou réquisition de faillite</li>
+                        <li>Action en justice ou requête de conciliation</li>
+                        <li>Exception soulevée en procès</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem;">Après l'interruption, un <strong>nouveau délai</strong> commence à courir.</p>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-pause-circle"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Suspension de la prescription</h3>
+                    <p>La prescription est suspendue (CO art. 134):</p>
+                    <ul>
+                        <li>Pendant un sursis</li>
+                        <li>En cas d'impossibilité de faire valoir la créance</li>
+                        <li>Entre époux pendant le mariage</li>
+                        <li>Envers les mineurs (tant qu'il n'y a pas de représentation)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-step-card">
+                <div class="step-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="step-content">
+                    <h3>Remarques importantes</h3>
+                    <p><strong>Délai relatif vs absolu:</strong> Pour les dommages-intérêts, outre le délai relatif (dès la connaissance), un délai absolu s'applique dès l'événement dommageable.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Depuis le 1.1.2020:</strong> Les lésions corporelles se prescrivent par 3 ans (relatif) / 20 ans (absolu).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="law-section">
+            <h2>Bases légales</h2>
+            <p class="law-subtitle">Code des obligations suisse (CO)</p>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3><a href="https://www.fedlex.admin.ch/eli/cc/27/317_321_377/fr#art_127" target="_blank" rel="noopener">Art. 127 CO – Délai de dix ans <i class="fas fa-external-link-alt"></i></a></h3>
+                </div>
+                <div class="law-content">
+                    <p>Toutes les actions se prescrivent par dix ans, lorsque le droit civil fédéral n'en dispose pas autrement.</p>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3><a href="https://www.fedlex.admin.ch/eli/cc/27/317_321_377/fr#art_128" target="_blank" rel="noopener">Art. 128 CO – Délai de cinq ans <i class="fas fa-external-link-alt"></i></a></h3>
+                </div>
+                <div class="law-content">
+                    <p>Se prescrivent par cinq ans:</p>
+                    <ol>
+                        <li>les loyers et fermages, les intérêts de capitaux et toutes autres redevances périodiques;</li>
+                        <li>les actions pour fournitures de vivres, pour dépenses d'auberge et pour fournitures de détaillants;</li>
+                        <li>les actions des artisans, pour leur travail; des marchands en détail, pour leurs fournitures; des médecins et autres gens de l'art, pour leurs soins; des avocats, procureurs, agents de droit et notaires, pour leurs services professionnels; ainsi que celles des travailleurs, pour leurs services.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3><a href="https://www.fedlex.admin.ch/eli/cc/27/317_321_377/fr#art_60" target="_blank" rel="noopener">Art. 60 CO – Dommages-intérêts <i class="fas fa-external-link-alt"></i></a></h3>
+                </div>
+                <div class="law-content">
+                    <ol>
+                        <li>L'action en dommages-intérêts ou en paiement d'une somme d'argent à titre de réparation morale se prescrit par trois ans à compter du jour où la partie lésée a eu connaissance du dommage ainsi que de la personne tenue à réparation et, dans tous les cas, par dix ans à compter du jour où le fait dommageable s'est produit ou a cessé.</li>
+                        <li>Si l'acte dommageable constitue une infraction pénale, l'action civile ne se prescrit pas avant l'action pénale.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-header">
+                    <h3><a href="https://www.fedlex.admin.ch/eli/cc/27/317_321_377/fr#art_135" target="_blank" rel="noopener">Art. 135 CO – Interruption <i class="fas fa-external-link-alt"></i></a></h3>
+                </div>
+                <div class="law-content">
+                    <p>La prescription est interrompue:</p>
+                    <ol>
+                        <li>lorsque le débiteur reconnaît la dette, notamment en payant des intérêts ou des acomptes, en fournissant des sûretés ou des cautions;</li>
+                        <li>lorsque le créancier fait valoir ses droits par des poursuites, par une requête de conciliation, par une action ou une exception devant un tribunal civil ou un tribunal arbitral, ou par une intervention dans une faillite.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>
+                <a href="https://durchblick.nl/tools_fr.html" target="_blank" rel="noopener">Durchblick Consultancy BV</a>
+                &nbsp;•&nbsp;
+                <a href="https://github.com/durchblick-nl/frist" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i> Code source sur GitHub
+                </a>
+            </p>
+            <p class="footer-disclaimer">Ce calculateur sert uniquement à titre indicatif. Pas de conseil juridique.</p>
+        </div>
+    </footer>
+
+    <div class="print-header" style="display: none;">
+        <img src="https://www.durchblick.nl/images/durchblick_logo.svg"
+             alt="Durchblick Consultancy Logo">
+        <div>
+            <h2>Calcul de prescription</h2>
+            <p id="printDate" style="font-size: 0.9rem; color: #666; margin-top: 0.25rem;"></p>
+        </div>
+    </div>
+
+    <div class="print-footer" style="display: none;">
+        <p><strong>frist.ch</strong> – Calculateur de prescription selon le Code des obligations suisse</p>
+        <p>Ce document sert uniquement à titre indicatif. Pas de conseil juridique.</p>
+    </div>
+
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <h2>Avis juridique</h2>
+            <div class="disclaimer-text">
+                <p><strong>Exclusion de responsabilité et conditions d'utilisation</strong></p>
+                <p>Durchblick Consultancy BV met ce calculateur de prescription à disposition en tant qu'outil indicatif sans engagement. Malgré un développement soigneux, aucune garantie ne peut être donnée quant à l'exactitude des calculs.</p>
+
+                <p>Il est notamment précisé:</p>
+                <ul>
+                    <li>Le calculateur sert uniquement à titre indicatif et ne remplace pas un conseil juridique.</li>
+                    <li>Les délais de prescription peuvent varier selon le cas particulier.</li>
+                    <li>Durchblick Consultancy BV décline toute responsabilité pour les dommages résultant de l'utilisation.</li>
+                </ul>
+
+                <p>En utilisant ce service, vous acceptez ces conditions.</p>
+            </div>
+            <button onclick="acceptDisclaimer()" class="accept-button">
+                J'ai lu l'avis et j'accepte les conditions
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Claim type configurations
+        const claimTypes = {
+            // 10 years
+            'general_10': { years: 10, name: 'Créances générales', article: 'CO art. 127', info: 'S\'applique à toutes les créances qui ne sont pas soumises à un délai spécial.' },
+            'contract_10': { years: 10, name: 'Créances contractuelles', article: 'CO art. 127', info: 'Créances contractuelles générales comme prix d\'achat, prêt, prix de l\'ouvrage.' },
+            'judgment_10': { years: 10, name: 'Jugements', article: 'CO art. 137', info: 'Les jugements entrés en force et les transactions judiciaires se prescrivent par 10 ans.' },
+            // 5 years
+            'rent_5': { years: 5, name: 'Loyers et fermages', article: 'CO art. 128 ch. 1', info: 'S\'applique aux loyers, pas aux rappels de charges.' },
+            'salary_5': { years: 5, name: 'Salaires', article: 'CO art. 128 ch. 3', info: 'Créances salariales du contrat de travail. Les bonus peuvent parfois avoir un délai différent.' },
+            'interest_5': { years: 5, name: 'Intérêts et rentes', article: 'CO art. 128 ch. 1', info: 'Intérêts et rentes dus périodiquement.' },
+            'alimony_5': { years: 5, name: 'Contributions d\'entretien', article: 'CO art. 128 ch. 1', info: 'Contributions d\'entretien périodiques du droit de la famille.' },
+            'board_5': { years: 5, name: 'Pension, hébergement', article: 'CO art. 128 ch. 2', info: 'Créances de pension, hébergement et auberge.' },
+            'craft_5': { years: 5, name: 'Travaux d\'artisans', article: 'CO art. 128 ch. 3', info: 'Créances d\'artisans, réparations, petits mandats.' },
+            'retail_5': { years: 5, name: 'Commerce de détail', article: 'CO art. 128 ch. 3', info: 'Vente au détail de marchandises aux consommateurs.' },
+            'medical_5': { years: 5, name: 'Honoraires de médecins et avocats', article: 'CO art. 128 ch. 3', info: 'Honoraires de médecins, avocats, notaires.' },
+            'building_5': { years: 5, name: 'Défauts d\'ouvrages immobiliers', article: 'CO art. 371', info: 'Actions en garantie pour ouvrages immobiliers. Pour ouvrages mobiliers: 2 ans.' },
+            // 3 years
+            'tort_3': { years: 3, absoluteYears: 10, name: 'Dommages-intérêts (délit)', article: 'CO art. 60', info: '3 ans dès la connaissance du dommage et du responsable, max. 10 ans dès l\'événement dommageable.', hasAbsolute: true },
+            'enrichment_3': { years: 3, absoluteYears: 10, name: 'Enrichissement illégitime', article: 'CO art. 67', info: '3 ans dès la connaissance de la créance, max. 10 ans dès sa naissance.', hasAbsolute: true },
+            'injury_3': { years: 3, absoluteYears: 20, name: 'Lésions corporelles', article: 'CO art. 60 (depuis 2020)', info: '3 ans dès la connaissance, max. 20 ans dès l\'événement dommageable. Applicable depuis le 1.1.2020.', hasAbsolute: true },
+            // 2 years
+            'sale_2': { years: 2, name: 'Défauts de la chose vendue', article: 'CO art. 210', info: 'Actions en garantie pour défauts dans les contrats de vente de choses mobilières. Délai dès la livraison.' },
+            'work_defect_2': { years: 2, name: 'Contrat d\'entreprise (mobilier)', article: 'CO art. 371', info: 'Actions pour défauts d\'ouvrages mobiliers. Pour ouvrages immobiliers: 5 ans.' },
+            // 1 year
+            'transport_1': { years: 1, name: 'Dommages de transport', article: 'CO art. 454', info: 'Actions dérivant du contrat de transport.' },
+            // Special cases
+            'loss_certificate_20': { years: 20, name: 'Actes de défaut de biens', article: 'CO art. 149a', info: 'Les créances constatées par acte de défaut de biens se prescrivent par 20 ans.' },
+            'culture_30': { years: 1, absoluteYears: 30, name: 'Biens culturels', article: 'CO art. 210 al. 3', info: '1 an dès connaissance, max. 30 ans dès acquisition. Pour biens culturels illicitement soustraits.', hasAbsolute: true },
+            'regress_3': { years: 3, name: 'Recours solidarité', article: 'CO art. 139', info: 'Les actions récursoires entre débiteurs solidaires se prescrivent par 3 ans dès le paiement.' },
+            'insurance_5': { years: 5, name: 'Créances d\'assurance', article: 'LCA art. 46 (depuis 2022)', info: 'Depuis 2022, les créances d\'assurance se prescrivent par 5 ans (auparavant 2 ans).' }
+        };
+
+        function updateClaimInfo() {
+            const select = document.getElementById('claimType');
+            const infoDiv = document.getElementById('claimTypeInfo');
+            const absoluteGroup = document.getElementById('absoluteDateGroup');
+            const type = claimTypes[select.value];
+
+            if (type) {
+                infoDiv.innerHTML = `
+                    <h4>${type.name} – ${type.article}</h4>
+                    <p><strong>Délai de prescription:</strong> ${type.years} ans${type.absoluteYears ? ` (relatif) / ${type.absoluteYears} ans (absolu)` : ''}</p>
+                    <p>${type.info}</p>
+                `;
+                infoDiv.style.display = 'block';
+
+                if (type.hasAbsolute) {
+                    absoluteGroup.style.display = 'block';
+                } else {
+                    absoluteGroup.style.display = 'none';
+                }
+            } else {
+                infoDiv.style.display = 'none';
+                absoluteGroup.style.display = 'none';
+            }
+        }
+
+        function toggleInterruptionDate() {
+            const checkbox = document.getElementById('interrupted');
+            const group = document.getElementById('interruptionDateGroup');
+            group.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        function parseDate(dateStr) {
+            const parts = dateStr.split('.');
+            if (parts.length !== 3) return null;
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function addYears(date, years) {
+            const result = new Date(date);
+            result.setFullYear(result.getFullYear() + years);
+            return result;
+        }
+
+        function daysBetween(date1, date2) {
+            const diffTime = date2 - date1;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        document.getElementById('verjaehrungForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const claimTypeValue = document.getElementById('claimType').value;
+            const startDateStr = document.getElementById('startDate').value;
+            const absoluteDateStr = document.getElementById('absoluteDate').value;
+            const interrupted = document.getElementById('interrupted').checked;
+            const interruptionDateStr = document.getElementById('interruptionDate').value;
+
+            if (!claimTypeValue || !startDateStr) {
+                alert('Veuillez remplir tous les champs obligatoires.');
+                return;
+            }
+
+            const type = claimTypes[claimTypeValue];
+            let startDate = parseDate(startDateStr);
+
+            if (!startDate) {
+                alert('Veuillez entrer une date valide.');
+                return;
+            }
+
+            if (interrupted && interruptionDateStr) {
+                const interruptionDate = parseDate(interruptionDateStr);
+                if (interruptionDate) {
+                    startDate = interruptionDate;
+                }
+            }
+
+            const expirationDate = addYears(startDate, type.years);
+
+            let absoluteExpiration = null;
+            if (type.hasAbsolute && absoluteDateStr) {
+                const absoluteDate = parseDate(absoluteDateStr);
+                if (absoluteDate) {
+                    absoluteExpiration = addYears(absoluteDate, type.absoluteYears);
+                }
+            }
+
+            let relevantExpiration = expirationDate;
+            let isAbsoluteRelevant = false;
+            if (absoluteExpiration && absoluteExpiration < expirationDate) {
+                relevantExpiration = absoluteExpiration;
+                isAbsoluteRelevant = true;
+            }
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const daysRemaining = daysBetween(today, relevantExpiration);
+
+            let status, statusClass, statusText;
+            if (daysRemaining < 0) {
+                status = 'expired';
+                statusClass = 'status-expired';
+                statusText = 'Prescrit';
+            } else if (daysRemaining <= 30) {
+                status = 'danger';
+                statusClass = 'status-danger';
+                statusText = 'Critique';
+            } else if (daysRemaining <= 180) {
+                status = 'warning';
+                statusClass = 'status-warning';
+                statusText = 'Attention';
+            } else {
+                status = 'ok';
+                statusClass = 'status-ok';
+                statusText = 'Actif';
+            }
+
+            let resultHTML = `
+                <h3>Résultat <span class="status-badge ${statusClass}">${statusText}</span></h3>
+                <table class="result-table">
+                    <tr>
+                        <td>Type de créance:</td>
+                        <td><strong>${type.name}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Base légale:</td>
+                        <td>${type.article}</td>
+                    </tr>
+                    <tr>
+                        <td>Délai de prescription:</td>
+                        <td>${type.years} ans${type.absoluteYears ? ` (relatif) / ${type.absoluteYears} ans (absolu)` : ''}</td>
+                    </tr>
+                    ${interrupted ? `
+                    <tr>
+                        <td>Interrompu le:</td>
+                        <td>${interruptionDateStr}</td>
+                    </tr>
+                    ` : ''}
+                    <tr>
+                        <td>Début du délai:</td>
+                        <td>${formatDate(startDate)}</td>
+                    </tr>
+            `;
+
+            if (type.hasAbsolute && absoluteExpiration) {
+                resultHTML += `
+                    <tr>
+                        <td>Prescription relative:</td>
+                        <td>${formatDate(expirationDate)}</td>
+                    </tr>
+                    <tr>
+                        <td>Prescription absolue:</td>
+                        <td>${formatDate(absoluteExpiration)}</td>
+                    </tr>
+                `;
+            }
+
+            resultHTML += `
+                    <tr class="result-total">
+                        <td><strong>Prescription le:</strong></td>
+                        <td><strong>${formatDate(relevantExpiration)}</strong>${isAbsoluteRelevant ? ' (délai absolu)' : ''}</td>
+                    </tr>
+                </table>
+            `;
+
+            if (daysRemaining >= 0) {
+                resultHTML += `<div class="countdown">Restant: ${daysRemaining} jours</div>`;
+            } else {
+                resultHTML += `<div class="countdown" style="color: #721c24;">Prescrit depuis ${Math.abs(daysRemaining)} jours</div>`;
+            }
+
+            if (status === 'danger' || status === 'warning') {
+                resultHTML += `
+                    <div class="warning" style="margin-top: 20px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Recommandation:</strong> La prescription expire bientôt. Envisagez une interruption par:
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Introduction d'une poursuite</li>
+                            <li>Dépôt d'une requête de conciliation</li>
+                            <li>Obtention d'une reconnaissance de dette</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            document.querySelector('.result-summary').innerHTML = resultHTML;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#startDate", { dateFormat: "d.m.Y", allowInput: true });
+            flatpickr("#absoluteDate", { dateFormat: "d.m.Y", allowInput: true });
+            flatpickr("#interruptionDate", { dateFormat: "d.m.Y", allowInput: true });
+        });
+
+        function printResult() {
+            document.getElementById('printDate').textContent = 'Créé le: ' + new Date().toLocaleDateString('fr-CH');
+            window.print();
+        }
+
+        function acceptDisclaimer() {
+            document.getElementById('disclaimerModal').style.display = 'none';
+            localStorage.setItem('verjaehrung_disclaimer_accepted', 'true');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('verjaehrung_disclaimer_accepted')) {
+                document.getElementById('disclaimerModal').style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

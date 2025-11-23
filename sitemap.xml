@@ -22,4 +22,44 @@
         <xhtml:link rel="alternate" hreflang="fr" href="https://frist.ch/fr/"/>
     </url>
 
+    <!-- German Verjährungsrechner -->
+    <url>
+        <loc>https://frist.ch/de/verjaehrung.html</loc>
+        <lastmod>2025-11-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="de" href="https://frist.ch/de/verjaehrung.html"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://frist.ch/fr/verjaehrung.html"/>
+    </url>
+
+    <!-- French Verjährungsrechner -->
+    <url>
+        <loc>https://frist.ch/fr/verjaehrung.html</loc>
+        <lastmod>2025-11-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="de" href="https://frist.ch/de/verjaehrung.html"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://frist.ch/fr/verjaehrung.html"/>
+    </url>
+
+    <!-- German Kündigungsfristenrechner -->
+    <url>
+        <loc>https://frist.ch/de/kuendigung.html</loc>
+        <lastmod>2025-11-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="de" href="https://frist.ch/de/kuendigung.html"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://frist.ch/fr/kuendigung.html"/>
+    </url>
+
+    <!-- French Kündigungsfristenrechner -->
+    <url>
+        <loc>https://frist.ch/fr/kuendigung.html</loc>
+        <lastmod>2025-11-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="de" href="https://frist.ch/de/kuendigung.html"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://frist.ch/fr/kuendigung.html"/>
+    </url>
+
 </urlset>
