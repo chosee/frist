@@ -30,6 +30,9 @@ frist/
 ├── scripts/
 │   ├── calculations.js # Core calculation functions
 │   └── app.js          # UI logic and form handling
+├── images/
+│   ├── og-frist-de.png # OG image for German (1200x630)
+│   └── og-frist-fr.png # OG image for French (1200x630)
 ├── test.js             # CLI test suite (node test.js)
 └── tests.html          # Browser-based visual tests
 ```
@@ -39,7 +42,7 @@ frist/
 - **Frontend**: Vanilla HTML5/CSS3/JavaScript
 - **Styling**: CSS Variables, Font Awesome icons, Flatpickr date picker
 - **Bilingual**: German (DE) and French (FR) versions
-- **Brand**: Durchblick Consultancy BV colors (#1375bc, #bc3c31, #3f6576)
+- **Brand**: Durchblick Consultancy BV colors (#3f606f, #cc5c53, #5a8a9d)
 - **No backend** - all calculation logic runs client-side
 
 ## Commands
