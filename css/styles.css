@@ -323,6 +323,7 @@
         .dot.weekend { background-color: #ed8936; }
         .dot.holiday { background-color: #e53e3e; }
         .dot.court-holiday { background-color: #4299e1; }
+        .dot.last-day { background-color: var(--accent-color); }
         .dot.skipped { background-color: #718096; }
 
         .timeline {

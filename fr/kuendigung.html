@@ -270,8 +270,8 @@
 
             <div id="result" class="result" style="display: none;">
                 <div class="result-actions">
-                    <button type="button" onclick="printResult()" class="print-button">
-                        <i class="fas fa-print"></i> Imprimer le résultat
+                    <button type="button" onclick="exportPDF()" class="print-button">
+                        <i class="fas fa-file-pdf"></i> Enregistrer en PDF
                     </button>
                 </div>
                 <div class="result-summary"></div>
@@ -829,6 +829,15 @@
             document.querySelector('.result-summary').innerHTML = resultHTML;
             document.getElementById('result').style.display = 'block';
             document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+
+            // Données pour export PDF
+            saveKuendigungData(
+                contractTypeEl.options[contractTypeEl.selectedIndex].text,
+                `${notice.period} ${notice.periodUnit === 'days' ? 'jours' : 'mois'} pour ${notice.termDate === 'any' ? 'n\'importe quand' : (notice.termDate === 'month_end' ? 'fin de mois' : 'fin de trimestre')}`,
+                noticeDate,
+                latestSendDate,
+                terminationDate
+            );
         });
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -838,6 +847,31 @@
         function printResult() {
             document.getElementById('printDate').textContent = 'Créé le: ' + new Date().toLocaleDateString('fr-CH');
             window.print();
+        }
+
+        // PDF Export
+        let lastKuendigungData = null;
+
+        function saveKuendigungData(contractType, noticePeriod, plannedDate, latestNoticeDate, terminationDate) {
+            lastKuendigungData = {
+                contractType: contractType,
+                noticePeriod: noticePeriod,
+                plannedDate: plannedDate,
+                latestNoticeDate: latestNoticeDate,
+                terminationDate: terminationDate
+            };
+        }
+
+        function exportPDF() {
+            if (!lastKuendigungData) {
+                alert('Veuillez d\'abord calculer le terme de résiliation.');
+                return;
+            }
+            if (typeof KuendigungPdfExport !== 'undefined') {
+                KuendigungPdfExport.generatePDF(lastKuendigungData, 'fr');
+            } else {
+                printResult();
+            }
         }
 
         function acceptDisclaimer() {
@@ -851,5 +885,7 @@
             }
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/3.0.3/jspdf.umd.min.js"></script>
+    <script src="../scripts/pdf-export.js"></script>
 </body>
 </html>

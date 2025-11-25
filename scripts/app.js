@@ -269,6 +269,9 @@ document.getElementById('fristForm').addEventListener('submit', function(e) {
 });
 
 function displayResult(startDate, endDate, fristType, customValue, useCourtHolidays, selectedHolidays, useWeekendDelivery = false) {
+    // Daten für PDF-Export speichern
+    saveCalculationData(startDate, endDate, fristType, customValue, useCourtHolidays, selectedHolidays, useWeekendDelivery);
+
     const result = document.getElementById('result');
     const resultSummary = result.querySelector('.result-summary');
     const lang = document.documentElement.lang || 'de';
@@ -397,4 +400,69 @@ function printResult() {
         printDateEl.textContent = prefix + new Date().toLocaleDateString(locale, dateOptions);
     }
     window.print();
+}
+
+// Globale Variablen für PDF-Export
+let lastCalculationData = null;
+
+function exportPDF() {
+    if (!lastCalculationData) {
+        alert(document.documentElement.lang === 'fr'
+            ? 'Veuillez d\'abord calculer un délai.'
+            : 'Bitte berechnen Sie zuerst eine Frist.');
+        return;
+    }
+
+    const lang = document.documentElement.lang || 'de';
+
+    if (typeof FristPdfExport !== 'undefined') {
+        FristPdfExport.generatePDF(lastCalculationData, lang);
+    } else {
+        // Fallback auf Drucken
+        printResult();
+    }
+}
+
+// Speichert die letzte Berechnung für PDF-Export
+function saveCalculationData(startDate, endDate, fristType, customValue, useCourtHolidays, selectedHolidays, useWeekendDelivery) {
+    const lang = document.documentElement.lang || 'de';
+
+    // Frist-Text formatieren
+    let fristText = '';
+    if (fristType.startsWith('months_')) {
+        const months = customValue || parseInt(fristType.split('_')[1]);
+        fristText = lang === 'fr'
+            ? `${months} mois`
+            : `${months} ${months === 1 ? 'Monat' : 'Monate'}`;
+    } else {
+        const days = customValue || parseInt(fristType.split('_')[1]);
+        fristText = lang === 'fr'
+            ? `${days} ${days === 1 ? 'jour' : 'jours'}`
+            : `${days} ${days === 1 ? 'Tag' : 'Tage'}`;
+    }
+
+    // Verfahrensart-Text
+    const verfahrensartEl = document.getElementById('verfahrensart');
+    const verfahrensart = verfahrensartEl ? verfahrensartEl.options[verfahrensartEl.selectedIndex].text : '';
+
+    // Kanton
+    const cantonEl = document.getElementById('canton');
+    const canton = cantonEl ? cantonEl.options[cantonEl.selectedIndex]?.text : '';
+
+    // Kalenderdaten sammeln
+    const calendarData = typeof FristPdfExport !== 'undefined'
+        ? FristPdfExport.collectCalendarData(startDate, endDate, useCourtHolidays, selectedHolidays)
+        : [];
+
+    lastCalculationData = {
+        startDate: startDate,
+        endDate: endDate,
+        fristType: fristType,
+        fristText: fristText,
+        verfahrensart: verfahrensart,
+        useCourtHolidays: useCourtHolidays,
+        selectedHolidays: selectedHolidays,
+        canton: canton,
+        calendarData: calendarData
+    };
 }

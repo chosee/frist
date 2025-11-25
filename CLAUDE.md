@@ -37,7 +37,8 @@ frist/
 │   └── styles.css          # Shared styles (Durchblick brand colors)
 ├── scripts/
 │   ├── calculations.js     # Core calculation functions (Fristenrechner)
-│   └── app.js              # UI logic and form handling (Fristenrechner)
+│   ├── app.js              # UI logic and form handling (Fristenrechner)
+│   └── pdf-export.js       # PDF export functionality (jsPDF)
 ├── images/
 │   ├── og-frist-de.png     # OG image for German (1200x630)
 │   └── og-frist-fr.png     # OG image for French (1200x630)
@@ -49,6 +50,7 @@ frist/
 
 - **Frontend**: Vanilla HTML5/CSS3/JavaScript
 - **Styling**: CSS Variables, Font Awesome icons, Flatpickr date picker
+- **PDF Export**: jsPDF library for client-side PDF generation
 - **Bilingual**: German (DE) and French (FR) versions
 - **Brand**: Durchblick Consultancy BV colors (#3f606f, #cc5c53, #5a8a9d)
 - **No backend** - all calculation logic runs client-side
@@ -156,7 +158,7 @@ Wird während Gerichtsferien zugestellt → Frist beginnt am ersten Tag **nach**
 - **Language detection**: Root `index.html` detects browser language and redirects to `/de/` or `/fr/`
 - **Shared code**: CSS and JS files are shared between language versions
 - **Form handling**: Each language HTML has hardcoded labels, shared JS handles logic
-- **Print support**: CSS print styles for documentation output
+- **PDF export**: Results can be exported as professional PDF documents with calendar visualization
 
 ## Zusammengehörige Projekte
 
