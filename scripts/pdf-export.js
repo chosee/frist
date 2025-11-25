@@ -297,7 +297,7 @@ const FristPdfExport = {
         rows.forEach(row => {
             doc.text(row[0], x, y);
             doc.setFont('helvetica', 'bold');
-            doc.text(row[1], 120, y);
+            doc.text(row[1], 190, y, { align: 'right' });
             doc.setFont('helvetica', 'normal');
             y += 6;
         });
@@ -525,7 +525,7 @@ const VerjaehrungPdfExport = {
         rows.forEach(row => {
             doc.text(row[0], x, y);
             doc.setFont('helvetica', 'bold');
-            doc.text(row[1], 120, y);
+            doc.text(row[1], 190, y, { align: 'right' });
             doc.setFont('helvetica', 'normal');
             y += 6;
         });
@@ -715,7 +715,7 @@ const KuendigungPdfExport = {
         rows.forEach(row => {
             doc.text(row[0], x, y);
             doc.setFont('helvetica', 'bold');
-            doc.text(row[1], 120, y);
+            doc.text(row[1], 190, y, { align: 'right' });
             doc.setFont('helvetica', 'normal');
             y += 6;
         });
